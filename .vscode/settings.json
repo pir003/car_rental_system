@@ -1,5 +1,6 @@
 {
     "githubPullRequests.queries": [
+        
         {
             "label": "Waiting For My Review",
             "query": "is:open review-requested:${user}"

@@ -8,3 +8,35 @@ def _get_connection() -> Driver:
     driver = GraphDatabase.driver(URI, auth=AUTH)
     driver.verify_connectivity()
     return driver
+
+def findCustomerByname(name):
+    data = _get_connection().execute_query("MATCH (c:Customer) where c.name = $name RETURN c.age AS age, c.address AS address", name=name)
+    if len(data[0]) > 0:
+        name = Customer (name, data[0] [0] [0] ['age', 'address'])
+        return name
+    else:
+        return Customer (name, "Not found in DB")
+
+class Customer:
+    def __init__(self, name, age, address):
+        self.name = name
+        self.age = age
+        self.address = address
+    
+    def get_Name(self):
+        return self.name
+    
+    def set_Name(self, value):
+        self.name = value
+    
+    def get_Age(self):
+        return self.age
+    
+    def set_Age(self, value):
+        self.age = value
+    
+    def get_Address(self):
+        return self.address
+    
+    def set_Address(self, value):
+        self.address = value

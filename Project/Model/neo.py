@@ -48,15 +48,4 @@ class User:
     def set_Email(self, value):
         self.email = value
 
-#user = findUserByUsername ("some_username")
-#print (user)
-
-class Car:
-    def __init__(self, car_id, make, model, year, location, status="available"):
-        self.car_id = car_id
-        self.make = make
-        self. model = model
-        self.year = year
-        self.location = location
-        self.status = status
     

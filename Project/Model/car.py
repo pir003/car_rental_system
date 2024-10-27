@@ -17,7 +17,7 @@ def createCar (car_id, make, model, year, location, status="available"):
 def findCarByCarid(car_id):
     data = _get_connection().execute_query("MATCH (c:Car) where c.car_id = $car_id RETURN c;", car_id=car_id)
     if len(data[0]) > 0:
-        car = Car (car_id, data[0] [0] [0]['make', 'model', 'year', 'location', 'status'])
+        car = Car (car_id, data[0][0]['make'], data[0][0]['model'], data[0][0]['year'], data[0][0]['location'], data[0][0]['status'])
         return car
     else:
         return Car (car_id, "Not found in DB")

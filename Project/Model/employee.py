@@ -17,7 +17,7 @@ def createEmployee (employee_id, name, address, branch):
 def findEmployeeById(employee_id):
     data = _get_connection().execute_query("MATCH (e:Employee) where e.employee_id = $employee_is RETURN e", employee_id=employee_id)
     if len(data[0]) > 0:
-        employee = Employee (employee_id, data[0] [0] [0]['name', 'address', 'branch'])
+        employee = Employee (employee_id, data[0] [0] ['name'], data [0] [0] ['address'], data [0] [0] ['branch'])
         return employee
     else:
         return Employee (employee_id, "Not found in DB")

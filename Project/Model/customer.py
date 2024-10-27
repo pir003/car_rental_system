@@ -9,13 +9,34 @@ def _get_connection() -> Driver:
     driver.verify_connectivity()
     return driver
 
+# Creating a customer
+def createCustomer (name, age, address):
+    _get_connection().execute_query(""" CREATE (c:Customer {name: $name, age: $age, address: $address})""", name = name, age = age, address = address)
+
+# Reading a customer
 def findCustomerByname(name):
-    data = _get_connection().execute_query("MATCH (c:Customer) where c.name = $name RETURN c.age AS age, c.address AS address", name=name)
+    data = _get_connection().execute_query("MATCH (c:Customer) where c.name = $name RETURN c", name=name)
     if len(data[0]) > 0:
         customer = Customer (name, data[0] [0] [0] ['age', 'address'])
         return customer
     else:
         return Customer (name, "Not found in DB")
+
+# Updating customer information
+def updateCustomer (name, age=None, address=None):
+    updates = []
+    if age is not None:
+        updates.append("c.age = $age")
+    if address is not None:
+        updates.append("c.address =$address")
+    database_update = ", ".join(updates)
+    query = f"MATCH (c.Customer) where c.name = $name SET {database_update}"
+    _get_connection().execute_query(query, name = name, age = age, address = address)
+
+#Deleting a customer
+def deleteCustomer (name):
+    _get_connection().execute_query("MATCH (c.Customer) where c.name = $name DELETE c", name = name)
+
 
 class Customer:
     def __init__(self, name, age, address):

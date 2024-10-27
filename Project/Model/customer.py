@@ -12,8 +12,8 @@ def _get_connection() -> Driver:
 def findCustomerByname(name):
     data = _get_connection().execute_query("MATCH (c:Customer) where c.name = $name RETURN c.age AS age, c.address AS address", name=name)
     if len(data[0]) > 0:
-        name = Customer (name, data[0] [0] [0] ['age', 'address'])
-        return name
+        customer = Customer (name, data[0] [0] [0] ['age', 'address'])
+        return customer
     else:
         return Customer (name, "Not found in DB")
 

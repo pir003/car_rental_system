@@ -73,6 +73,10 @@ class Booking:
         self.driver().execute_query(query, customer_id=customer_id, car_id=car_id)
         updateCar(car_id, status="rented")
         
+    def return_car(self, customer_id, car_id, status):
+        pass 
+    # Ser på denna litt senere, Anne! 
+        
         
      
     # Sjekke om kunden har en booking inne, sjekke om bilen er tilgjengelig

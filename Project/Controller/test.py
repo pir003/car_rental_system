@@ -1,8 +1,9 @@
-from project import app
+from Project import app
 from flask import render_template, request, redirect, url_for
 from Project.Model.car import findCarByCarid, createCar, updateCar, deleteCar
 from Project.Model.customer import findCustomerByname, createCustomer, updateCustomer, deleteCustomer, customerBooking, customerRental
 from Project.Model.employee import findEmployeeById, createEmployee, updateEmployee, deleteEmployee
+#Endrer til storforbokstav, kan være feilen siden Python er case sensitiv og filnavnene våre har stor forbokstav.
 
 # Her er det litt feil trur eg, men det ser eg på seinare
 #route index

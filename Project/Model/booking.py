@@ -35,10 +35,27 @@ class Booking:
         # Se om man må endre fra c til c_customer og c til c_car for å forhindre forvirring
         query = ("MATCH (c:customer), (c:Car)"
                  "WHERE c.customer_id = $customer_id AND c.car_id = $car_id"
-                 "CREATE (c) -[:BOOKED]->(c)")
+                 "CREATE (c)-[:BOOKED]->(c)")
         self.driver.execute_query(query, customer_id=customer_id, car_id=car_id)
         return {"Success": "Du har booket bilen!"}
         
+        
+    def cancel_car_order(self, customer_id, car_id):
+        if not customerBooking(customer_id):
+            return {"Error": "Du har ingen booking å kansellere"}
+        
+        car = findCarByCarid(car_id)
+        if car.get_Status() != "booked":
+            return {"error": "Bilen er ikke booket"}
+        
+        query = ("MATCH (c:Customer)-[r:BOOKED]->(c:car)"
+                 "WHERE c.customer_id = $customer_id AND c.car_id = $car_id"
+                 "DELETE r")
+        
+        self.driver.execute_query(query, customer_id=customer_id, car_id=car_id)
+        updateCar(car_id, status="available")
+        
+        return {"success": "Bookingen er kansellert"}
         
     # Sjekke om kunden har en booking inne, sjekke om bilen er tilgjengelig
     # Opprette en booking-relasjon i databasen

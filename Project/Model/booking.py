@@ -10,3 +10,22 @@ def _get_connection() -> Driver:
     driver = GraphDatabase.driver(URI, auth=AUTH)
     driver.verify_connectivity()
     return driver
+
+class Booking:
+    
+    def __init__(self, driver):
+        selv.driver = driver
+        
+    # Metode for bestille bil
+    # Sjekke om kunden har en booking inne, sjekke om bilen er tilgjengelig
+    # Opprette en booking-relasjon i databasen
+    
+    # Metode for å avbestille en bestilling
+    # Sjekke om kunden har en booking i systemet + avbestille booking
+    
+    # Metode for å leie en bil
+    # Sjekke om kunden har en booking i systemet + endre statusen til bilen fra booked til rented
+    
+    # Metode for å returnere en bil
+    # Sjekke om kunden har leid den bilen
+    # Status på bilen er en av parametrene + oppdatere statusen på bilen

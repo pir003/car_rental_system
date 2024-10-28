@@ -4,6 +4,7 @@ from Project.Model.car import findCarByCarid, createCar, updateCar, deleteCar
 from Project.Model.customer import findCustomerByname, createCustomer, updateCustomer, deleteCustomer, customerBooking, customerRental
 from Project.Model.employee import findEmployeeById, createEmployee, updateEmployee, deleteEmployee
 #Endrer til storforbokstav, kan være feilen siden Python er case sensitiv og filnavnene våre har stor forbokstav.
+#Svar: Eg hadde allereie endra på namna til å ha små bokstavar, men det ser ikkje ut til å ha blitt pusha (og no når eg har endra dei tilbake hjå meg så funkar det, så endringar der blir visst ikkje pusha trur eg)
 
 # Her er det litt feil trur eg, men det ser eg på seinare
 #route index

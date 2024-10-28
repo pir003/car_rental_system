@@ -36,7 +36,7 @@ class Booking:
         query = ("MATCH (c:customer), (c:Car)"
                  "WHERE c.customer_id = $customer_id AND c.car_id = $car_id"
                  "CREATE (c)-[:BOOKED]->(c)")
-        self.driver.execute_query(query, customer_id=customer_id, car_id=car_id)
+        self.driver().execute_query(query, customer_id=customer_id, car_id=car_id)
         return {"Success": "Du har booket bilen!"}
         
         
@@ -52,7 +52,7 @@ class Booking:
                  "WHERE c.customer_id = $customer_id AND c.car_id = $car_id"
                  "DELETE r")
         
-        self.driver.execute_query(query, customer_id=customer_id, car_id=car_id)
+        self.driver().execute_query(query, customer_id=customer_id, car_id=car_id)
         updateCar(car_id, status="available")
         
         return {"success": "Bookingen er kansellert"}

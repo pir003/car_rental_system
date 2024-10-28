@@ -28,6 +28,17 @@ class Booking:
         if car.get_Status() != "available":
             return {"error": "Car is not available."}
         
+        # Endre statusen til bilen til booked
+        updateCar(car_id, status="booked")
+        
+        # Opprette booking-relasjonen mellom kunden og bilen
+        # Se om man må endre fra c til c_customer og c til c_car for å forhindre forvirring
+        query = ("MATCH (c:customer), (c:Car)"
+                 "WHERE c.customer_id = $customer_id AND c.car_id = $car_id"
+                 "CREATE (c) -[:BOOKED]->(c)")
+        self.driver.execute_query(query, customer_id=customer_id, car_id=car_id)
+        return {"Success": "Du har booket bilen!"}
+        
         
     # Sjekke om kunden har en booking inne, sjekke om bilen er tilgjengelig
     # Opprette en booking-relasjon i databasen

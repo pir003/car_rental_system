@@ -1,8 +1,8 @@
 from project import app
 from flask import render_template, request, redirect, url_for
-from project.model.car import findCarByCarid, createCar, updateCar, deleteCar
-from project.model.customer import findCustomerByname, createCustomer, updateCustomer, deleteCustomer, customerBooking, customerRental
-from project.model.employee import findEmployeeById, createEmployee, updateEmployee, deleteEmployee
+from Project.Model.car import findCarByCarid, createCar, updateCar, deleteCar
+from Project.Model.customer import findCustomerByname, createCustomer, updateCustomer, deleteCustomer, customerBooking, customerRental
+from Project.Model.employee import findEmployeeById, createEmployee, updateEmployee, deleteEmployee
 
 # Her er det litt feil trur eg, men det ser eg på seinare
 #route index

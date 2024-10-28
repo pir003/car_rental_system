@@ -18,6 +18,17 @@ class Booking:
         self.driver = _get_connection
         
     # Metode for bestille bil
+    def order_car(self, customer_id, car_id):
+        # Sjekke om kunden har en booking i systemet fra før av
+        if customerBooking(customer_id):
+            return {"error": "Customer have already booked a car"}
+        
+        # Sjekke om bilen er tilgjengelig eller ikke
+        car = findCarByCarid(car_id)
+        if car.get_Status() != "available":
+            return {"error": "Car is not available."}
+        
+        
     # Sjekke om kunden har en booking inne, sjekke om bilen er tilgjengelig
     # Opprette en booking-relasjon i databasen
     

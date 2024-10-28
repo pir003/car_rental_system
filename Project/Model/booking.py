@@ -51,7 +51,7 @@ class Booking:
             return {"error": "Bilen er ikke booket"}
         
         # Slette "booked"-relasjonen mellom kunde og bil, og oppdatere status på bil
-        query = ("MATCH (c:Customer)-[r:BOOKED]->(c:car)"
+        query = ("MATCH (c:Customer)-[r:BOOKED]->(c:Car)"
                  "WHERE c.customer_id = $customer_id AND c.car_id = $car_id"
                  "DELETE r")
         
@@ -60,6 +60,21 @@ class Booking:
         
         return {"success": "Bookingen er kansellert"}
         
+    def rent_car(self, customer_id, car_id):
+        # Sjekke om kunden har booket bilen
+        if not customerBooking(customer_id):
+            return {"error": "Du har ikke booket denne bilen"}
+        
+        query = ("MATCH (c:Customer)-[r:BOOKED]->(c:Car)"
+                 "WHERE c.customer_id = $customer_id AND c.car_id = $car_id"
+                 "DELETE r"
+                 "CREATE (c)-[r:RENTED]->(c)")
+        
+        self.driver().execute_query(query, customer_id=customer_id, car_id=car_id)
+        updateCar(car_id, status="rented")
+        
+        
+     
     # Sjekke om kunden har en booking inne, sjekke om bilen er tilgjengelig
     # Opprette en booking-relasjon i databasen
     

@@ -9,6 +9,9 @@ def _get_connection() -> Driver:
     driver.verify_connectivity()
     return driver
 
+# BÅDE Car og Customer bruker bokstaven C når det gjelder Cypher-spørringene, og det kan eventuelt føre til kluss. 
+# Eventuelt endre bokstavene til c_customer og c_car, for å skille på de mer tydelig?
+
 # Creating a customer
 def createCustomer (customer_id, name, age, address):
     _get_connection().execute_query(""" CREATE (c:Customer {customer_id: $customer_id, name: $name, age: $age, address: $address})""", customer_id = customer_id, name = name, age = age, address = address)

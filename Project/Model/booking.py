@@ -39,15 +39,18 @@ class Booking:
         self.driver().execute_query(query, customer_id=customer_id, car_id=car_id)
         return {"Success": "Du har booket bilen!"}
         
-        
+    # Metode for å kansellere en booking    
     def cancel_car_order(self, customer_id, car_id):
+        # Sjekke om kunden har en booking i systemet
         if not customerBooking(customer_id):
             return {"Error": "Du har ingen booking å kansellere"}
         
+        # Sjekke om statusen på bilen er "booked"
         car = findCarByCarid(car_id)
         if car.get_Status() != "booked":
             return {"error": "Bilen er ikke booket"}
         
+        # Slette "booked"-relasjonen mellom kunde og bil, og oppdatere status på bil
         query = ("MATCH (c:Customer)-[r:BOOKED]->(c:car)"
                  "WHERE c.customer_id = $customer_id AND c.car_id = $car_id"
                  "DELETE r")

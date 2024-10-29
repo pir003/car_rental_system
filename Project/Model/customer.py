@@ -14,7 +14,8 @@ def _get_connection() -> Driver:
 
 # Creating a customer
 def createCustomer (customer_id, name, age, address):
-    _get_connection().execute_query(""" CREATE (c:Customer {customer_id: $customer_id, name: $name, age: $age, address: $address})""", customer_id = customer_id, name = name, age = age, address = address)
+    query = """ CREATE (c:Customer {customer_id: $customer_id, name: $name, age: $age, address: $address})"""
+    _get_connection().execute_query(query, customer_id = customer_id, name = name, age = age, address = address)
 
 # Reading a customer
 def findCustomerByname(customer_id):
@@ -29,26 +30,26 @@ def findCustomerByname(customer_id):
 def updateCustomer (customer_id, name=None, age=None, address=None):
     updates = []
     if name is not None:
-        updates.append ("c.name = $age")
+        updates.append ("c.name = $name")
     if age is not None:
         updates.append("c.age = $age")
     if address is not None:
         updates.append("c.address =$address")
     database_update = ", ".join(updates)
-    query = f"MATCH (c.Customer) where c.customer_id = $customer_id SET {database_update}"
+    query = f"MATCH (c:Customer) where c.customer_id = $customer_id SET {database_update}"
     _get_connection().execute_query(query, customer_id = customer_id, name = name, age = age, address = address)
 
 #Deleting a customer
 def deleteCustomer (customer_id):
-    _get_connection().execute_query("MATCH (c.Customer) where c.customer_id = $customer_id DELETE c", customer_id = customer_id)
+    _get_connection().execute_query("MATCH (c:Customer) where c.customer_id = $customer_id DELETE c", customer_id = customer_id)
 
-def customerBooking(customer_id):
-    is_booked = _get_connection().execute_query("MATCH (c.Customer) - [:BOOKED]->(car:Car) where c.customer_id =$customer_id RETURN car", customer_id = customer_id)
-    return is_booked.single() is not None
+def hasCustomerBooking(customer_id):
+    is_booked = _get_connection().execute_query("MATCH (c:Customer) - [:BOOKED]->(car:Car) where c.customer_id =$customer_id RETURN car", customer_id = customer_id)
+    return len(is_booked) > 0
 
-def customerRental (customer_id, car_id):
-    is_rented = _get_connection().execute_query("MATCH (c.Customer) - [:RENTED]->(car:Car) where c.customer_id =$customer_id AND car.car_id = $car_id RETURN car", customer_id = customer_id, car_id = car_id)
-    return is_rented.single() is not None
+def hasCustomerRental (customer_id, car_id):
+    is_rented = _get_connection().execute_query("MATCH (c:Customer) - [:RENTED]->(car:Car) where c.customer_id =$customer_id AND car.car_id = $car_id RETURN car", customer_id = customer_id, car_id = car_id)
+    return len (is_rented) > 0
 
 class Customer:
     def __init__(self, customer_id, name, age, address):

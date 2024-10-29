@@ -31,7 +31,8 @@ def order_car ():
             flash ("This car is not available")
             return redirect (url_for("..."))
     return render_template ("...")
-    
+
+# cancel_order, rent_car, return_car, add_car, update_car, delete_car, add_customer, update_customer, delete_customer, add_employee, update_employee, delete_employee
 
 @app.route('/add_car', methods=["GET", "POST"])
 def add_car():

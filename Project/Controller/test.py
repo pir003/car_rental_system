@@ -1,7 +1,7 @@
 from Project import app
 from flask import render_template, request, redirect, url_for, flash
 from Project.Model.car import findCarByCarid, createCar, updateCar, deleteCar
-from Project.Model.customer import findCustomerByname, createCustomer, updateCustomer, deleteCustomer, hasCustomerBooking, hasCustomerRental
+from Project.Model.customer import findCustomerByname, createCustomer, updateCustomer, deleteCustomer, customerBooking, customerRental
 from Project.Model.employee import findEmployeeById, createEmployee, updateEmployee, deleteEmployee
 #Endrer til storforbokstav, kan være feilen siden Python er case sensitiv og filnavnene våre har stor forbokstav.
 #Svar: Eg hadde allereie endra på namna til å ha små bokstavar, men det ser ikkje ut til å ha blitt pusha (og no når eg har endra dei tilbake hjå meg så funkar det, så endringar der blir visst ikkje pusha trur eg)
@@ -18,7 +18,7 @@ def order_car ():
         customer_id = request.form ["customer_id"]
         car_id = request.form ["car_id"]
 
-        if hasCustomerBooking(customer_id):
+        if customerBooking(customer_id):
             flash ("You have already booked a car")
             return redirect (url_for("..."))
         

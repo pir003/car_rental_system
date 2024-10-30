@@ -43,11 +43,11 @@ def updateCustomer (customer_id, name=None, age=None, address=None):
 def deleteCustomer (customer_id):
     _get_connection().execute_query("MATCH (c:Customer) where c.customer_id = $customer_id DELETE c", customer_id = customer_id)
 
-def hasCustomerBooking(customer_id):
+def customerBooking(customer_id):
     is_booked = _get_connection().execute_query("MATCH (c:Customer) - [:BOOKED]->(car:Car) where c.customer_id =$customer_id RETURN car", customer_id = customer_id)
     return len(is_booked) > 0
 
-def hasCustomerRental (customer_id, car_id):
+def customerRental (customer_id, car_id):
     is_rented = _get_connection().execute_query("MATCH (c:Customer) - [:RENTED]->(car:Car) where c.customer_id =$customer_id AND car.car_id = $car_id RETURN car", customer_id = customer_id, car_id = car_id)
     return len (is_rented) > 0
 

@@ -74,9 +74,32 @@ class Booking:
         updateCar(car_id, status="rented")
         
     def return_car(self, customer_id, car_id, status):
-        pass 
-    # Ser på denna litt senere, Anne! 
         
+        #Sjekke om kunden har leid bilen
+        rental_data = self.driver().execute_query(
+            "MATCH (u:Customer)-[r:RENTED]->(c:Car)"
+            "WHERE u.customer_id = $customer_id AND c.car_id = $car_id"
+            "RETURN c", 
+            customer_id=customer_id, car_id=car_id
+        )
+        
+        if not rental_data:
+            return {"error": "Customer has not rented this car"}
+        
+        #Endre statusen på bilen
+        new_status = "available" if status == "ok" else "damaged"
+        
+        #Oppdatere bilens status og slette "RENTED"-relasjonen
+        query = (
+            "MATCH (u:Customer)-[r:RENTED]->(c:Car)"
+            "WHERE u.customer_id = $customer_id AND c.car_id = $car_id"
+            "DELETE r"
+            "SET c.status = $new_status"
+        )
+        self.driver().execute_query(query, customer_id=customer_id, car_id=car_id, new_status=new_status)
+        
+        return {"success": f"Bilen er returnert og statusen er '{new_status}'"}
+
         
      
     # Sjekke om kunden har en booking inne, sjekke om bilen er tilgjengelig

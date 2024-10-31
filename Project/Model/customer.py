@@ -18,79 +18,86 @@ def node_to_json(node):
         return node_properties
 
 # Creating a customer
-def save_customer (customer_id, name, age, address):
+def save_customer (name, age, address):
     with _get_connection().session() as session:
-        customers = session.run("MERGE (u:Customer {customer_id: $customer_id, name: $name, age: $age, address: $address})"
-                                "RETURN u",
-                                customer_id = customer_id, name = name, age = age, address = address)
+        customers = session.run(
+            "MERGE (u:Customer { name: $name, age: $age, address: $address})"
+            "RETURN u",
+            name = name, age = age, address = address
+            )
         nodes_json = [node_to_json(record["u"]) for record in customers]
         return nodes_json
 
 # Find a specific customer
-def find_customer_by_name(customer_id):
+def find_customer_by_name(name):
     with _get_connection().session() as session:
-        customers = session.run("MATCH (u:Customer)"
-                                "WHERE u.customer_id = $customer_id "
-                                "RETURN u;",
-                                customer_id = customer_id)
+        customers = session.run(
+            "MATCH (u:Customer)"
+            "WHERE u.name = $name "
+            "RETURN u;",
+            name = name
+            )
         nodes_json = [node_to_json(record["u"]) for record in customers]
         return nodes_json
 
 # Find all customers
 def find_all_customers():
     with _get_connection().session() as session:
-        customers = session.run("MATCH (u:Customer)"
-                                "RETURN u;")
+        customers = session.run(
+            "MATCH (u:Customer)"
+            "RETURN u;"
+            )
         nodes_json = [node_to_json(record["u"]) for record in customers]
         return nodes_json
 
 # Updating customer information
-def update_customer (customer_id, name, age, address):
+def update_customer (name, age, address):
     with _get_connection().session() as session:
-        customers = session.run("MATCH (u:Customer {customer_id: $customer_id})"
-                                "SET u.name = $name, u.age = $age, u.address = $address"
-                                "RETURN u;",
-                                customer_id =customer_id, name = name, age = age, address = address)
+        customers = session.run(
+            "MATCH (u:Customer {name: $name})"
+            "SET u.age = $age, u.address = $address"
+            "RETURN u;",
+            name = name, age = age, address = address
+            )
         nodes_json = [node_to_json(record["u"]) for record in customers]
         return nodes_json
 
 #Deleting a customer
-def delete_customer (customer_id):
+def delete_customer (name):
     with _get_connection().session() as session:
-        session.run("MATCH (u:Customer {customer_id: $customer_id})"
-                                "DELETE u;",
-                                customer_id = customer_id)
+        session.run(
+            "MATCH (u:Customer {name: $name})"
+            "DELETE u;",
+            name = name
+            )
 
-def customer_booking(customer_id):
+def customer_booking(name):
     with _get_connection().session() as session:
-        is_booked = session.run("MATCH (u:Customer) - [:BOOKED]-> (car:Car)"
-                                "WHERE u.customer_id = $customer_id"
-                                "RETURN car",
-                                customer_id = customer_id)
+        is_booked = session.run(
+            "MATCH (u:Customer) - [:BOOKED]-> (car:Car)"
+            "WHERE u.name = $name"
+            "RETURN car",
+            name = name
+            )
         booking = is_booked.single()
         return booking is not None
 
-def customer_rental (customer_id, car_id):
+def customer_rental (name, car_id):
     with _get_connection().session() as session:
-        is_rented = session.run("MATCH (u:Customer) - [:RENTED]-> (car:Car)"
-                                "WHERE u.customer_id = $customer_id AND car.car_id = $car_id"
-                                "RETURN car",
-                                customer_id = customer_id, car_id = car_id)
+        is_rented = session.run(
+            "MATCH (u:Customer) - [:RENTED]-> (car:Car)"
+            "WHERE u.name = $name AND car.car_id = $car_id"
+            "RETURN car",
+            name = name, car_id = car_id
+            )
         rented = is_rented.single()
         return rented is not None
 
 class Customer:
-    def __init__(self, customer_id, name, age, address):
-        self.customer_id = customer_id
+    def __init__(self, name, age, address):
         self.name = name
         self.age = age
         self.address = address
-    
-    def get_Customerid(self):
-        return self.customer_id
-    
-    def set_Customerid(self, value):
-        self.customer_id = value
     
     def get_Name(self):
         return self.name
@@ -111,7 +118,8 @@ class Customer:
         self.address = value
     
     def to_json(self):
-        return {"customer_id": self.customer_id,
-                "name": self.name,
-                "age": self.age,
-                "address": self.address}
+        return {
+            "name": self.name,
+            "age": self.age,
+            "address": self.address
+            }

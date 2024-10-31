@@ -20,27 +20,33 @@ def node_to_json(node):
 # Creating a car
 def save_car (car_id, make, model, year, location, status="available"):
     with _get_connection().session() as session:
-        cars = session.run("MERGE (c:Car {car_id: $car_id, make: $make, model: $model, year: $year, location: $location, status: $status})"
-                           "RETURN c",
-                           car_id = car_id, make = make, model = model, year = year, location = location, status = status)
+        cars = session.run(
+            "MERGE (c:Car {car_id: $car_id, make: $make, model: $model, year: $year, location: $location, status: $status})"
+            "RETURN c",
+            car_id = car_id, make = make, model = model, year = year, location = location, status = status
+            )
         nodes_json = [node_to_json(record["c"]) for record in cars]
         return nodes_json
 
 # Find a specific car
 def find_car_by_carid(car_id):
     with _get_connection().session() as session:
-        cars = session.run("MATCH (c:Car)"
-                           "WHERE c.car_id = $car_id"
-                           "RETURN c;",
-                           car_id = car_id)
+        cars = session.run(
+            "MATCH (c:Car)"
+            "WHERE c.car_id = $car_id"
+            "RETURN c;",
+            car_id = car_id
+            )
         nodes_json = [node_to_json(record["c"]) for record in cars]
         return nodes_json
 
 # Find all cars
 def find_all_cars():
     with _get_connection().session() as session:
-        cars = session.run("MATCH (c:Car)"
-                           "RETURN c;")
+        cars = session.run(
+            "MATCH (c:Car)"
+            "RETURN c;"
+            )
         nodes_json = [node_to_json(record["c"]) for record in cars]
         print (nodes_json)
         return nodes_json
@@ -48,10 +54,12 @@ def find_all_cars():
 # Updating car information
 def update_car (car_id, make, model, year, location, status):
     with _get_connection().session() as session:
-        cars = session.run("MATCH (c:Car {car_id: $car_id})"
-                           "SET c.make = $make, c.model = $model, c.year = $year, c.location = $location, c.status = $status"
-                           "RETURN c;",
-                           car_id = car_id, make = make, model = model, year = year, location = location, status = status)
+        cars = session.run(
+            "MATCH (c:Car {car_id: $car_id})"
+            "SET c.make = $make, c.model = $model, c.year = $year, c.location = $location, c.status = $status"
+            "RETURN c;",
+            car_id = car_id, make = make, model = model, year = year, location = location, status = status
+            )
         print (cars)
         nodes_json = [node_to_json(record["c"]) for record in cars]
         print (nodes_json)
@@ -61,9 +69,11 @@ def update_car (car_id, make, model, year, location, status):
 #Deleting a car
 def delete_car (car_id):
     with _get_connection().session() as session:
-        session.run("MATCH (c:Car {car_id: $car_id})"
-                    "DELETE c;",
-                    car_id = car_id)
+        session.run(
+            "MATCH (c:Car {car_id: $car_id})"
+            "DELETE c;",
+            car_id = car_id
+            )
 
 class Car:
     def __init__(self, car_id, make, model, year, location, status = "available"):
@@ -82,9 +92,11 @@ class Car:
         self.status = new_status
 
     def to_json(self):
-        return {"car_id": self.car_id, 
-                "make": self.make,
-                "model": self.model,
-                "year": self.year,
-                "location": self.location,
-                "status": self.status}
+        return {
+            "car_id": self.car_id, 
+            "make": self.make,
+            "model": self.model,
+            "year": self.year,
+            "location": self.location,
+            "status": self.status
+            }

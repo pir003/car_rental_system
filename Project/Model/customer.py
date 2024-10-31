@@ -1,4 +1,5 @@
 from neo4j import GraphDatabase, Driver
+import json
 
 # Oppsett av databaseforbindelsen
 URI = "neo4j+ssc://09b7066b.databases.neo4j.io"
@@ -9,47 +10,74 @@ def _get_connection() -> Driver:
     driver.verify_connectivity()
     return driver
 
-# BÅDE Car og Customer bruker bokstaven C når det gjelder Cypher-spørringene, og det kan eventuelt føre til kluss. 
-# Eventuelt endre bokstavene til c_customer og c_car, for å skille på de mer tydelig?
+def node_to_json(node):
+    if node is None:
+        return {}
+    else:
+        node_properties = dict(node.items())
+        return node_properties
 
 # Creating a customer
-def createCustomer (customer_id, name, age, address):
-    query = """ CREATE (c:Customer {customer_id: $customer_id, name: $name, age: $age, address: $address})"""
-    _get_connection().execute_query(query, customer_id = customer_id, name = name, age = age, address = address)
+def save_customer (customer_id, name, age, address):
+    with _get_connection().session() as session:
+        customers = session.run("MERGE (u:Customer {customer_id: $customer_id, name: $name, age: $age, address: $address})"
+                                "RETURN u",
+                                customer_id = customer_id, name = name, age = age, address = address)
+        nodes_json = [node_to_json(record["u"]) for record in customers]
+        return nodes_json
 
-# Reading a customer
-def findCustomerByname(customer_id):
-    data = _get_connection().execute_query("MATCH (c:Customer) where c.customer_id = $customer_id RETURN c", customer_id = customer_id)
-    if len(data[0]) > 0:
-        customer = Customer (customer_id, data [0] [0] ['name'], data[0] [0] ['age'], data[0] [0]['address'])
-        return customer
-    else:
-        return Customer (customer_id, "Not found in DB")
+# Find a specific customer
+def find_customer_by_name(customer_id):
+    with _get_connection().session() as session:
+        customers = session.run("MATCH (u:Customer)"
+                                "WHERE u.customer_id = $customer_id "
+                                "RETURN u;",
+                                customer_id = customer_id)
+        nodes_json = [node_to_json(record["u"]) for record in customers]
+        return nodes_json
+
+# Find all customers
+def find_all_customers():
+    with _get_connection().session() as session:
+        customers = session.run("MATCH (u:Customer)"
+                                "RETURN u;")
+        nodes_json = [node_to_json(record["u"]) for record in customers]
+        return nodes_json
 
 # Updating customer information
-def updateCustomer (customer_id, name=None, age=None, address=None):
-    updates = []
-    if name is not None:
-        updates.append ("c.name = $name")
-    if age is not None:
-        updates.append("c.age = $age")
-    if address is not None:
-        updates.append("c.address =$address")
-    database_update = ", ".join(updates)
-    query = f"MATCH (c:Customer) where c.customer_id = $customer_id SET {database_update}"
-    _get_connection().execute_query(query, customer_id = customer_id, name = name, age = age, address = address)
+def update_customer (customer_id, name, age, address):
+    with _get_connection().session() as session:
+        customers = session.run("MATCH (u:Customer {customer_id: $customer_id})"
+                                "SET u.name = $name, u.age = $age, u.address = $address"
+                                "RETURN u;",
+                                customer_id =customer_id, name = name, age = age, address = address)
+        nodes_json = [node_to_json(record["u"]) for record in customers]
+        return nodes_json
 
 #Deleting a customer
-def deleteCustomer (customer_id):
-    _get_connection().execute_query("MATCH (c:Customer) where c.customer_id = $customer_id DELETE c", customer_id = customer_id)
+def delete_customer (customer_id):
+    with _get_connection().session() as session:
+        session.run("MATCH (u:Customer {customer_id: $customer_id})"
+                                "DELETE u;",
+                                customer_id = customer_id)
 
-def customerBooking(customer_id):
-    is_booked = _get_connection().execute_query("MATCH (c:Customer) - [:BOOKED]->(car:Car) where c.customer_id =$customer_id RETURN car", customer_id = customer_id)
-    return len(is_booked) > 0
+def customer_booking(customer_id):
+    with _get_connection().session() as session:
+        is_booked = session.run("MATCH (u:Customer) - [:BOOKED]-> (car:Car)"
+                                "WHERE u.customer_id = $customer_id"
+                                "RETURN car",
+                                customer_id = customer_id)
+        booking = is_booked.single()
+        return booking is not None
 
-def customerRental (customer_id, car_id):
-    is_rented = _get_connection().execute_query("MATCH (c:Customer) - [:RENTED]->(car:Car) where c.customer_id =$customer_id AND car.car_id = $car_id RETURN car", customer_id = customer_id, car_id = car_id)
-    return len (is_rented) > 0
+def customer_rental (customer_id, car_id):
+    with _get_connection().session() as session:
+        is_rented = session.run("MATCH (u:Customer) - [:RENTED]-> (car:Car)"
+                                "WHERE u.customer_id = $customer_id AND car.car_id = $car_id"
+                                "RETURN car",
+                                customer_id = customer_id, car_id = car_id)
+        rented = is_rented.single()
+        return rented is not None
 
 class Customer:
     def __init__(self, customer_id, name, age, address):
@@ -81,3 +109,9 @@ class Customer:
     
     def set_Address(self, value):
         self.address = value
+    
+    def to_json(self):
+        return {"customer_id": self.customer_id,
+                "name": self.name,
+                "age": self.age,
+                "address": self.address}

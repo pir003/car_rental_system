@@ -1,4 +1,5 @@
 from neo4j import GraphDatabase, Driver
+import json
 
 # Oppsett av databaseforbindelsen
 URI = "neo4j+ssc://09b7066b.databases.neo4j.io"
@@ -9,39 +10,60 @@ def _get_connection() -> Driver:
     driver.verify_connectivity()
     return driver
 
-# Creating a car
-def createCar (car_id, make, model, year, location, status="available"):
-    _get_connection().execute_query(""" CREATE (c:Car {car_id: $car_id, make: $make, model: $model, year = $year, location = $location, status = $status})""", car_id = car_id, make = make, model = model, year = year, location = location, status = status)
-
-# Reading a car
-def findCarByCarid(car_id):
-    data = _get_connection().execute_query("MATCH (c:Car) where c.car_id = $car_id RETURN c;", car_id=car_id)
-    if len(data[0]) > 0:
-        car = Car (car_id, data[0][0]['make'], data[0][0]['model'], data[0][0]['year'], data[0][0]['location'], data[0][0]['status'])
-        return car
+def node_to_json(node):
+    if node is None:
+        return {}
     else:
-        return Car (car_id, "Not found in DB")
+        node_properties = dict(node.items())
+        return node_properties
+
+# Creating a car
+def Save_car (car_id, make, model, year, location, status="available"):
+    with _get_connection().session() as session:
+        cars = session.run("MERGE (c:Car {car_id: $car_id, make: $make, model: $model, year: $year, location: $location, status: $status})"
+                           "RETURN c",
+                           car_id = car_id, make = make, model = model, year = year, location = location, status = status)
+        nodes_json = [node_to_json(record["c"]) for record in cars]
+        return nodes_json
+
+# Find a specific car
+def find_car_by_carid(car_id):
+    with _get_connection().session() as session:
+        cars = session.run("MATCH (c:Car)"
+                           "WHERE c.car_id = $car_id"
+                           "RETURN c;",
+                           car_id = car_id)
+        nodes_json = [node_to_json(record["c"]) for record in cars]
+        return nodes_json
+
+# Find all cars
+def find_all_cars():
+    with _get_connection().session() as session:
+        cars = session.run("MATCH (c:Car)"
+                           "RETURN c;")
+        nodes_json = [node_to_json(record["c"]) for record in cars]
+        print (nodes_json)
+        return nodes_json
 
 # Updating car information
-def updateCar (car_id, make=None, model=None, year=None, location=None, status=None):
-    updates = []
-    if make is not None:
-        updates.append("c.make = $make")
-    if model is not None:
-        updates.append("c.model =$model")
-    if year is not None:
-        updates.append("c.year = $year")
-    if location is not None:
-        updates.append("c.location = $location")
-    if status is not None:
-        updates.append("c.status = $status")
-    database_update = ", ".join(updates)
-    query = f"MATCH (c.Car) where c.car_id = $car_id SET {database_update}"
-    _get_connection().execute_query(query, car_id = car_id, make = make, maodel = model, yeaar = year, location = location, status = status)
+def update_car (car_id, make, model, year, location, status):
+    with _get_connection().session() as session:
+        cars = session.run("MATCH (c:Car {car_id: $car_id})"
+                           "SET c.make = $make, c.model = $model, c.year = $year, c.location = $location, c.status = $status"
+                           "RETURN c;",
+                           car_id = car_id, make = make, model = model, year = year, location = location, status = status)
+        print (cars)
+        nodes_json = [node_to_json(record["c"]) for record in cars]
+        print (nodes_json)
+        return nodes_json
+
 
 #Deleting a car
-def deleteCar (car_id):
-    _get_connection().execute_query("MATCH (c.Car) where c.car_id = $car_id DELETE c", car_id = car_id)
+def delete_car (car_id):
+    with _get_connection().session() as session:
+        session.run("MATCH (c:Car {car_id: $car_id})"
+                    "DELETE c;",
+                    car_id = car_id)
 
 class Car:
     def __init__(self, car_id, make, model, year, location, status = "available"):
@@ -49,12 +71,20 @@ class Car:
         self.make = make
         self.model = model
         self.year = year
-        self.locatiton = location
+        self.location = location
         self.status = status
 
     
-    def get_Status (self):
+    def get_status (self):
         return self.status
     
-    def set_Status (self, new_status):
+    def set_status (self, new_status):
         self.status = new_status
+
+    def to_json(self):
+        return {"car_id": self.car_id, 
+                "make": self.make,
+                "model": self.model,
+                "year": self.year,
+                "location": self.location,
+                "status": self.status}

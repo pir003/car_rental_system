@@ -18,7 +18,7 @@ def node_to_json(node):
         return node_properties
 
 # Creating a car
-def Save_car (car_id, make, model, year, location, status="available"):
+def save_car (car_id, make, model, year, location, status="available"):
     with _get_connection().session() as session:
         cars = session.run("MERGE (c:Car {car_id: $car_id, make: $make, model: $model, year: $year, location: $location, status: $status})"
                            "RETURN c",

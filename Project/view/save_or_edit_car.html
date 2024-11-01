@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Add or edit a car</title>
+  </head>
+  <body>
+    <h2>{% if car ‰}Edit car{% else ‰}Add car{% endif %}</h2>
+    <form method="post">
+        <input type="text" name="car_id" placeholder="CAR ID" value="{{car.car_id if car else '' }}" required >
+        <input type="text" name="make" placeholder="Make" value="{{car.make if car else '' }}" required >
+        <input type="text" name="model" placeholder="Model" value="{{car.model if car else '' }}" required >
+        <input type="text" name="year" placeholder="Year" value="{{car.year if car else '' }}" required >
+        <input type="text" name="location" placeholder="Location" value="{{car.location if car else '' }}" required >
+        <select name="status" required>
+            <option value="available" {% if car and car.status == 'available' %} selected{% endif %}>Available</option>
+            <option value="booked" {% if car and car.status == 'booked' %} selected{% endif %}>Booked</option>
+            <option value="rented" {% if car and car.status == 'rented' %} selected{% endif %}>Rented</option>
+            <option value="damaged" {% if car and car.status == 'damaged' %} selected{% endif %}>Damaged</option>
+        </select>
+        <button type="submit">{% if car %} Update car{‰ else %} Add car{% endif %}</button>
+    </form>
+  </body>
+</html>

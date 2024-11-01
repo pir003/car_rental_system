@@ -1,7 +1,7 @@
 from neo4j import GraphDatabase, Driver
-from Model.neo import _get_connection
-from Model.car import find_car_by_carid, update_car
-from Model.customer import find_customer_by_name, customer_booking, customer_rental
+from Project.Model.neo import _get_connection
+from Project.Model.car import find_car_by_carid, update_car
+from Project.Model.customer import find_customer_by_name, customer_booking, customer_rental
 import json
 
 # Oppsett av databaseforbindelsen

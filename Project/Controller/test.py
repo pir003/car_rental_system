@@ -22,15 +22,17 @@ def find_car():
     record = json.loads(request.data)
     return json.dumps(find_car_by_carid(record['car_id']))
 
-@app.route('/save_car', methods=['POST'])
+@app.route('/save_car', methods=['GET', 'POST'])
 def save_car_info():
-    record = json.loads(request.data)
-    save_car(record['car_id'], record['make'], record['model'], record['year'], record['location'], record['status'])
-    flash("Car saved successfully.", "success")
-    return redirect(url_for("...")) # Same som Delet og Update
+    if request.method == 'POST':
+        record = json.loads(request.data)
+        save_car(record['car_id'], record['make'], record['model'], record['year'], record['location'], record['status'])
+        flash("Car saved successfully.", "success")
+        return redirect(url_for("...")) # Same som Delet og Update
+    return render_template("...")
 
 @app.route('/update_car', methods=['PUT']) 
-def update_car_info():
+def update_car_info(car_id):
     record = json.loads(request.data)
     update_car(record['car_id'], record['make'], record['model'], record['year'], record['location'], record['status'])
     flash("Car updated successfully.", "success")
@@ -51,14 +53,17 @@ def query_cutomers():
 @app.route('/get_customer_by_name', methods=['POST'])
 def find_customer():
     record = json.loads(request.data)
-    return json.dumps(find_customer_by_name(record['name']))
+    json.dumps(find_customer_by_name(record['name']))
+    return render_template("...", record['name'])
 
-@app.route('/save_customer', methods=['POST'])
+@app.route('/save_customer', methods=['GET', 'POST'])
 def save_customer_info():
-    record = json.loads(request.data)
-    save_car(record['name'], record['age'], record['address'])
-    flash("Customer saved successfully.", "success")
-    return redirect(url_for("...")) # Same som Delet og Update
+    if request.method == 'POST':
+        record = json.loads(request.data)
+        save_car(record['name'], record['age'], record['address'])
+        flash("Customer saved successfully.", "success")
+        return redirect(url_for("...")) # Same som Delet og Update
+    return render_template("...")
 
 @app.route('/update_customer', methods=['PUT']) 
 def update_customer_info():
@@ -82,14 +87,17 @@ def query_employee():
 @app.route('/get_employee_by_id', methods=['POST'])
 def find_employee():
     record = json.loads(request.data)
-    return json.dumps(find_employee_by_id(record['employee_id']))
+    json.dumps(find_employee_by_id(record['employee_id']))
+    return render_template("...", record['employee_id'])
 
-@app.route('/save_car', methods=['POST'])
+@app.route('/save_car', methods=['GET', 'POST'])
 def save_employee_info():
-    record = json.loads(request.data)
-    save_employee(record['employee_id'], record['name'], record['address'], record['branch'])
-    flash("Employee saved successfully.", "success")
-    return redirect(url_for("...")) # Same som Delet og Update
+    if request.method == 'POST':
+        record = json.loads(request.data)
+        save_employee(record['employee_id'], record['name'], record['address'], record['branch'])
+        flash("Employee saved successfully.", "success")
+        return redirect(url_for("...")) # Same som Delet og Update
+    render_template("...")
 
 @app.route('/update_employee', methods=['PUT']) 
 def update_emplyee_info():
@@ -105,27 +113,28 @@ def delete_employee_info():
     flash("Employee deleted successfully.", "success")
     return redirect(url_for("...")) # Same som Update og save_car
 
-@app.route('/order_a_car', methods=['POST'])
+@app.route('/order_a_car', methods=['GET','POST'])
 def order_a_car():
-    name = request.form['name']
-    car_id = request.form['car_id']
+    if request.method == 'POST':
+        name = request.form['name']
+        car_id = request.form['car_id']
+        booking = Booking()
+        result = booking.order_car(name, car_id)
 
-    booking = Booking()
-    result = booking.order_car(name, car_id)
-
-    if result.get('success'):
-        flash(result['message'], 'success')
-        return redirect (url_for("..."))
-    else:
-        flash(result['error'], 'error')
+        if result.get('success'):
+            flash(result['message'], 'success')
+            return redirect (url_for("..."))
+        else:
+            flash(result['error'], 'error')
     
-    return render_template("...")
+    customers = find_all_customers()
+    cars = find_all_cars
+    return render_template("...", customers=customers, cars=cars)
 
 @app.route('/cancel_car_order', methods=['POST'])
 def cancel_car():
     name = request.form['name']
     car_id = request.form['car_id']
-
     booking = Booking()
     result = booking.cancel_car_order(name, car_id)
 
@@ -141,7 +150,6 @@ def cancel_car():
 def rent_a_car():
     name = request.form['name']
     car_id = request.form['car_id']
-
     booking = Booking()
     result = booking.rent_car(name, car_id)
 
@@ -158,7 +166,6 @@ def return_a_car():
     name = request.form['name']
     car_id = request.form['car_id']
     status = request.form['status']
-
     booking = Booking()
     result = booking.return_car(name, car_id, status)
 

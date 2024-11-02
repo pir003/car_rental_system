@@ -54,8 +54,8 @@ def find_all_employees():
 def update_employee (employee_id, name, address, branch):
     with _get_connection().session() as session:
         employees = session.run (
-            "MATCH (e:Employee {employee_id: $employee_id})"
-            "SET e.name = $name, e.address = $address, e.branch = $branch"
+            "MATCH (e:Employee {employee_id: $employee_id}) "
+            "SET e.name = $name, e.address = $address, e.branch = $branch "
             "RETURN e;",
             employee_id = employee_id, name = name, address = address, branch = branch
             )

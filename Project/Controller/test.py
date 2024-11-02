@@ -87,10 +87,10 @@ def save_employee_info():
     save_employee(record['employee_id'], record['name'], record['address'], record['branch'])
     return jsonify({"message": "Employee saved successfully"})
 
-@app.route('/update_employee', methods=['PUT']) 
-def update_employee_info():
+@app.route('/update_employee/<employee_id>', methods=['PUT']) 
+def update_employee_info(employee_id):
     record = request.get_json()
-    update_employee(record['employee_id'], record['name'], record['address'], record['branch'])
+    update_employee(employee_id, record['name'], record['address'], record['branch'])
     return jsonify({"message": "Employee updated successfully."})
 
 @app.route('/delete_employee', methods=['DELETE'])

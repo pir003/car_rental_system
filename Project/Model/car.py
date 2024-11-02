@@ -32,8 +32,8 @@ def save_car (car_id, make, model, year, location, status="available"):
 def find_car_by_carid(car_id):
     with _get_connection().session() as session:
         cars = session.run(
-            "MATCH (c:Car)"
-            "WHERE c.car_id = $car_id"
+            "MATCH (c:Car) "
+            "WHERE c.car_id = $car_id "
             "RETURN c",
             car_id = car_id
             )

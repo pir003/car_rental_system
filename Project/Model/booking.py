@@ -48,8 +48,11 @@ class Booking:
         query = (
             "MATCH (u:Customer), (c:Car) "
             "WHERE u.name = $name AND c.car_id = $car_id "
-            "CREATE (u)-[:BOOKED]->(c)"
+            "CREATE (u)-[:BOOKED]->(c) "
             )
+        
+        print(f"Running query: {query} with parameters: name={name}, car_id={car_id}")
+        
         with _get_connection().session() as session:
             session.run(query, name=name, car_id=car_id)
         return {"success": True, "message": "Du har booket bilen!"}

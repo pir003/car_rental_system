@@ -33,7 +33,7 @@ class Booking:
         
         # Sjekke om bilen er tilgjengelig eller ikke
         car = find_car_by_carid(car_id)
-        if car.get_status() != "available":
+        if car.get("status") != "available":
             return {"success": False, "error": "Car is not available."}
         
         # Endre statusen til bilen til booked

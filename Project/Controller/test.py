@@ -20,8 +20,6 @@ def query_cars():
 @app.route('/get_cars_by_carid', methods=['POST'])
 def find_car():
     record = request.get_json()
-    print(record)
-    print(record["car_id"])
     car = find_car_by_carid(record['car_id'])
     return jsonify(car)
 

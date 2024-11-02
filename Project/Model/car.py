@@ -37,9 +37,7 @@ def find_car_by_carid(car_id):
             "RETURN c",
             car_id = car_id
             )
-        print (cars)
         nodes_json = [node_to_json(record["c"]) for record in cars]
-        print(nodes_json)
         return nodes_json
 
 # Find all cars

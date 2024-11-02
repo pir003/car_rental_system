@@ -34,7 +34,7 @@ def find_car_by_carid(car_id):
         cars = session.run(
             "MATCH (c:Car)"
             "WHERE c.car_id = $car_id"
-            "RETURN c;",
+            "RETURN c",
             car_id = car_id
             )
         nodes_json = [node_to_json(record["c"]) for record in cars]

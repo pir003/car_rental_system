@@ -32,7 +32,11 @@ class Booking:
             return {"success": False, "error": "Customer have already booked a car"}
         
         # Sjekke om bilen er tilgjengelig eller ikke
-        car = find_car_by_carid(car_id)
+        car_list = find_car_by_carid(car_id)
+        if not car_list:
+            return {"success": False, "error": "Car not found."}
+        
+        car = car_list[0]
         if car.get("status") != "available":
             return {"success": False, "error": "Car is not available."}
         
@@ -44,7 +48,7 @@ class Booking:
         query = (
             "MATCH (u:Customer), (c:Car) "
             "WHERE u.name = $name AND c.car_id = $car_id "
-            "CREATE (u) - [:BOOKED]-> (c)"
+            "CREATE (u)-[:BOOKED]->(c)"
             )
         with _get_connection().session() as session:
             session.run(query, name=name, car_id=car_id)

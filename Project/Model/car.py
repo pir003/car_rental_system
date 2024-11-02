@@ -55,8 +55,8 @@ def find_all_cars():
 def update_car (car_id, make, model, year, location, status):
     with _get_connection().session() as session:
         cars = session.run(
-            "MATCH (c:Car {car_id: $car_id})"
-            "SET c.make = $make, c.model = $model, c.year = $year, c.location = $location, c.status = $status"
+            "MATCH (c:Car {car_id: $car_id}) "
+            "SET c.make = $make, c.model = $model, c.year = $year, c.location = $location, c.status = $status "
             "RETURN c;",
             car_id = car_id, make = make, model = model, year = year, location = location, status = status
             )

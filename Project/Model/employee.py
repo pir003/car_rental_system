@@ -32,9 +32,9 @@ def save_employee (employee_id, name, address, branch):
 def find_employee_by_id(employee_id):
     with _get_connection().session() as session:
         employees = session.run (
-            "MATCH (e:Employee)",
-            "WHERE e.employee_id = $employee_id"
-            "RETURN e;",
+            "MATCH (e:Employee) ",
+            "WHERE e.employee_id = $employee_id "
+            "RETURN e",
             employee_id = employee_id
             )
         nodes_json = [node_to_json(record["e"]) for record in employees]

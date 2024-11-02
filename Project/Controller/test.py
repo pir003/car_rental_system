@@ -55,13 +55,13 @@ def find_customer():
 @app.route('/save_customer', methods=['POST'])
 def save_customer_info():
     record = request.get_json()
-    save_customer(record['name'], record['age'], record['address'])
+    save_customer(record["customer_id"], record['name'], record['age'], record['address'])
     return jsonify({"message": "Customer saved successfully"})
 
-@app.route('/update_customer', methods=['PUT']) 
-def update_customer_info():
+@app.route('/update_customer/<customer_id>', methods=['PUT']) 
+def update_customer_info(customer_id):
     record = request.get_json()
-    update_customer(record['name'], record['age'], record['address'])
+    update_customer(customer_id, record["name"], record['age'], record['address'])
     return jsonify({"message": "Customer updated successfully"})
     
 @app.route('/delete_customer', methods=['DELETE'])

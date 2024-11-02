@@ -18,12 +18,12 @@ def node_to_json(node):
         return node_properties
 
 # Creating a customer
-def save_customer (name, age, address):
+def save_customer (customer_id, name, age, address):
     with _get_connection().session() as session:
         customers = session.run(
-            "MERGE (u:Customer { name: $name, age: $age, address: $address})"
+            "MERGE (u:Customer {customer_id: $customer_id, name: $name, age: $age, address: $address})"
             "RETURN u",
-            name = name, age = age, address = address
+            customer_id=customer_id, name = name, age = age, address = address
             )
         nodes_json = [node_to_json(record["u"]) for record in customers]
         return nodes_json
@@ -51,13 +51,13 @@ def find_all_customers():
         return nodes_json
 
 # Updating customer information
-def update_customer (name, age, address):
+def update_customer (customer_id, name, age, address):
     with _get_connection().session() as session:
         customers = session.run(
-            "MATCH (u:Customer {name: $name})"
-            "SET u.age = $age, u.address = $address"
+            "MATCH (u:Customer {customer_id: $customer_id})"
+            "SET u.name = $name, u.age = $age, u.address = $address "
             "RETURN u;",
-            name = name, age = age, address = address
+            customer_id = customer_id, name = name, age = age, address = address
             )
         nodes_json = [node_to_json(record["u"]) for record in customers]
         return nodes_json
@@ -94,11 +94,18 @@ def customer_rental (name, car_id):
         return rented is not None
 
 class Customer:
-    def __init__(self, name, age, address):
+    def __init__(self, customer_id ,name, age, address):
+        self.customer_id = customer_id
         self.name = name
         self.age = age
         self.address = address
     
+    def get_customer_id(self):
+        return self.customer_id
+    
+    def set_customer_id(self, value):
+        self.customer_id = value
+
     def get_Name(self):
         return self.name
     
@@ -119,7 +126,8 @@ class Customer:
     
     def to_json(self):
         return {
+            "customer_id": self.customer_id,
             "name": self.name,
             "age": self.age,
             "address": self.address
-            }
+        }

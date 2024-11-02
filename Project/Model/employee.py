@@ -31,7 +31,7 @@ def save_employee (employee_id, name, address, branch):
 # Find a specific employee:
 def find_employee_by_id(employee_id):
     with _get_connection().session() as session:
-        employees = session.run (
+        employees = session.run(
             "MATCH (e:Employee) ",
             "WHERE e.employee_id = $employee_id "
             "RETURN e",

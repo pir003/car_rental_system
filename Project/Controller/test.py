@@ -29,7 +29,7 @@ def save_car_info():
     save_car(record['car_id'], record['make'], record['model'], record['year'], record['location'], record['status'])
     return jsonify({"message": "Car saved successfully."})
 
-@app.route('/update_car', methods=['PUT']) 
+@app.route('/update_car/<car_id>', methods=['PUT']) 
 def update_car_info(car_id):
     record = request.get_json()
     update_car(car_id, record['make'], record['model'], record['year'], record['location'], record['status'])

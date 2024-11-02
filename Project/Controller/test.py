@@ -17,7 +17,7 @@ def query_cars():
     cars = find_all_cars()
     return jsonify(cars)
 
-@app.route('/get_cars_by_carid', methods=['GET'])
+@app.route('/get_cars_by_carid', methods=['POST'])
 def find_car():
     record = request.get_json()
     car = find_car_by_carid(record['car_id'])

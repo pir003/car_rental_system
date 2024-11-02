@@ -42,7 +42,7 @@ class Booking:
         # Opprette booking-relasjonen mellom kunden og bilen
         # Se om man må endre fra c til c_customer og c til c_car for å forhindre forvirring
         query = (
-            "MATCH (u:customer), (c:Car) "
+            "MATCH (u:Customer), (c:Car) "
             "WHERE u.name = $name AND c.car_id = $car_id "
             "CREATE (u)-[:BOOKED]->(c)"
             )

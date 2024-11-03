@@ -44,7 +44,7 @@ def order_car( name, car_id):
     # Opprette booking-relasjonen mellom kunden og bilen
     # Se om man må endre fra c til c_customer og c til c_car for å forhindre forvirring
     with _get_connection().session() as session:
-        session.run(
+        result = session.run(
             "MATCH (u:Customer), (c:Car) " 
             "WHERE u.name = $name AND c.car_id = $car_id " 
             "CREATE (u)-[:BOOKED]->(c) "

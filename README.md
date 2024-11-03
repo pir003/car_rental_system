@@ -41,3 +41,17 @@ The only parameter you need is the customers name.
 
 ## CRUD with employees
 
+### See existing employees in the database
+To see the existing employees in the database, you need to use /get_employees and have the GET method. You will recieve the information on JSON format, and you will get all the employees stored in the database. 
+
+To get access to a specific employee, you need to use /get_employee_by_id and change the method to POST.
+It requires the employee_id when you are doing it. 
+<img width="635" alt="image" src="https://github.com/user-attachments/assets/f4047918-5790-4d38-9591-1be6ef38b887">
+
+You need to do this to access a specific employee with their employee id. 
+
+### Create an employee
+
+
+
+

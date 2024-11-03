@@ -118,7 +118,7 @@ def rent_car(name, car_id):
 def return_car(name, car_id, status):
         
     #Sjekke om kunden har leid bilen
-    with _get_connection.session() as session:
+    with _get_connection().session() as session:
         rental_data = session.run(
             "MATCH (u:Customer)-[rent:RENTED]->(c:Car) "
             "WHERE u.name = $name AND c.car_id = $car_id "

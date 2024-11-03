@@ -32,7 +32,7 @@ def save_customer (customer_id, name, age, address):
 def find_customer_by_name(name):
     with _get_connection().session() as session:
         customers = session.run(
-            "MATCH (u:Customer)"
+            "MATCH (u:Customer) "
             "WHERE u.name = $name "
             "RETURN u; ",
             name = name
@@ -44,8 +44,8 @@ def find_customer_by_name(name):
 def find_all_customers():
     with _get_connection().session() as session:
         customers = session.run(
-            "MATCH (u:Customer)"
-            "RETURN u;"
+            "MATCH (u:Customer) "
+            "RETURN u; "
             )
         nodes_json = [node_to_json(record["u"]) for record in customers]
         return nodes_json
@@ -54,7 +54,7 @@ def find_all_customers():
 def update_customer (customer_id, name, age, address):
     with _get_connection().session() as session:
         customers = session.run(
-            "MATCH (u:Customer {customer_id: $customer_id})"
+            "MATCH (u:Customer {customer_id: $customer_id}) "
             "SET u.name = $name, u.age = $age, u.address = $address "
             "RETURN u; ",
             customer_id = customer_id, name = name, age = age, address = address
@@ -66,7 +66,7 @@ def update_customer (customer_id, name, age, address):
 def delete_customer (name):
     with _get_connection().session() as session:
         session.run(
-            "MATCH (u:Customer {name: $name})"
+            "MATCH (u:Customer {name: $name}) "
             "DELETE u; ",
             name = name
             )

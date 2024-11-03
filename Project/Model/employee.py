@@ -21,8 +21,8 @@ def node_to_json(node):
 def save_employee (employee_id, name, address, branch):
     with _get_connection().session() as session:
         employees = session.run (
-            "MERGE (e:Employee {employee_id: $employee_id, name: $name, address: $address, branch: $branch})"
-            "RETURN e",
+            "MERGE (e:Employee {employee_id: $employee_id, name: $name, address: $address, branch: $branch}) "
+            "RETURN e ",
             employee_id = employee_id, name = name, address = address, branch = branch
             )
         nodes_json = [node_to_json(record["e"]) for record in employees]
@@ -34,7 +34,7 @@ def find_employee_by_id(employee_id):
         employees = session.run(
             "MATCH (e:Employee) "
             "WHERE e.employee_id = $employee_id "
-            "RETURN e",
+            "RETURN e ",
             employee_id = employee_id
             )
         nodes_json = [node_to_json(record["e"]) for record in employees]
@@ -44,8 +44,8 @@ def find_employee_by_id(employee_id):
 def find_all_employees():
     with _get_connection().session() as session:
         employees = session.run(
-            "MATCH (e:Employee)"
-            "RETURN e;"
+            "MATCH (e:Employee) "
+            "RETURN e; "
             )
         nodes_json = [node_to_json(record["e"]) for record in employees]
         return nodes_json
@@ -56,7 +56,7 @@ def update_employee (employee_id, name, address, branch):
         employees = session.run (
             "MATCH (e:Employee {employee_id: $employee_id}) "
             "SET e.name = $name, e.address = $address, e.branch = $branch "
-            "RETURN e;",
+            "RETURN e; ",
             employee_id = employee_id, name = name, address = address, branch = branch
             )
         nodes_json = [node_to_json(record["e"]) for record in employees]
@@ -66,8 +66,8 @@ def update_employee (employee_id, name, address, branch):
 def delete_employee (employee_id):
     with _get_connection().session() as session:
         session.run(
-            "MATCH (e:Employee {employee_id: $employee_id})"
-            "DELETE e;",
+            "MATCH (e:Employee {employee_id: $employee_id}) "
+            "DELETE e; ",
             employee_id = employee_id
             )
 

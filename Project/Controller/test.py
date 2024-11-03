@@ -29,18 +29,17 @@ def save_car_info():
     save_car(record['car_id'], record['make'], record['model'], record['year'], record['location'], record['status'])
     return jsonify({"message": "Car saved successfully."})
 
-
 @app.route('/update_car/<car_id>', methods=['PUT']) 
 def update_car_info(car_id):
     record = request.get_json()
     update_car(int(car_id), record['make'], record['model'], record['year'], record['location'], record['status'])
-    return jsonify({"message": "Car updated successfully."}) # Same som Sav_cars og Delete
+    return jsonify({"message": "Car updated successfully."}) 
 
 @app.route('/delete_car', methods=['DELETE'])
 def delete_car_info():
     record = request.get_json()
     delete_car(record['car_id'])
-    return jsonify({"message": "Car deleted successfully"}) # Same som Update og save_car
+    return jsonify({"message": "Car deleted successfully"}) 
 
 @app.route('/get_customers', methods=['GET'])
 def query_cutomers():
@@ -62,11 +61,8 @@ def save_customer_info():
 @app.route('/update_customer/<customer_id>', methods=['PUT']) 
 def update_customer_info(customer_id):
     record = request.get_json()
-    updated_customer = update_customer(int(customer_id), record["name"], record["age"], record["address"])
-    if updated_customer:
-        return jsonify({"message": "Customer updated successfully", "updated_customer": updated_customer})
-    else:
-        return jsonify({"error": "Customer not founf or update failed"}), 404
+    update_customer(int(customer_id), record["name"], record["age"], record["address"])
+    return jsonify({"message": "Customer updated successfully"})
     
 @app.route('/delete_customer', methods=['DELETE'])
 def delete_customer_info():
@@ -94,7 +90,7 @@ def save_employee_info():
 @app.route('/update_employee/<employee_id>', methods=['PUT']) 
 def update_employee_info(employee_id):
     record = request.get_json()
-    update_employee(employee_id, record['name'], record['address'], record['branch'])
+    update_employee(int(employee_id), record['name'], record['address'], record['branch'])
     return jsonify({"message": "Employee updated successfully."})
 
 @app.route('/delete_employee', methods=['DELETE'])

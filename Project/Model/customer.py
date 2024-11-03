@@ -59,13 +59,8 @@ def update_customer (customer_id, name, age, address):
             "RETURN u; ",
             customer_id=customer_id, name=name, age=age, address=address
             )
-        record = customers.single()
-        if record:
-            return node_to_json(record["u"])
-        #nodes_json = [node_to_json(record["u"]) for record in customers]
-        #return nodes_json
-        else:
-            return None
+        nodes_json = [node_to_json(record["u"]) for record in customers]
+        return nodes_json
 
 #Deleting a customer
 def delete_customer (name):

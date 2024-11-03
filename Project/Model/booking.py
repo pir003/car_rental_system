@@ -107,7 +107,7 @@ def rent_car(name, car_id):
         "MATCH (u:Customer)-[r:BOOKED]->(c:Car) "
         "WHERE u.name = $name AND c.car_id = $car_id "
         "DELETE r "
-        "CREATE (u)-[r:RENTED]->(c) "
+        "CREATE (u)-[rent:RENTED]->(c) "
         )
     with _get_connection().session() as session:
         session.run(query, name=name, car_id=car_id)

@@ -16,3 +16,18 @@ You can try to get Bruce Wayne as your customer.
 
 
 It should look like this.  
+
+# Create a customer 
+To create a customer, you will use the POST method in postman, and change to /save_customer.
+You need to add customer_id, name, age and address. 
+<img width="626" alt="image" src="https://github.com/user-attachments/assets/a99a7514-663a-4803-b19a-479594d7332e">
+
+Try this to create the customer "Ola Nordmann". 
+
+# Delete customer
+If you want to delete the customer, you need to change to DELETE method in postman, and change to /delete_customer. 
+The only parameter you need is the customers name. 
+<img width="636" alt="image" src="https://github.com/user-attachments/assets/707ae20d-12ee-40a3-ac53-53956da094e5">
+
+
+

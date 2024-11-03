@@ -21,8 +21,8 @@ def node_to_json(node):
 def save_car (car_id, make, model, year, location, status="available"):
     with _get_connection().session() as session:
         cars = session.run(
-            "MERGE (c:Car {car_id: $car_id, make: $make, model: $model, year: $year, location: $location, status: $status})"
-            "RETURN c",
+            "MERGE (c:Car {car_id: $car_id, make: $make, model: $model, year: $year, location: $location, status: $status}) "
+            "RETURN c ",
             car_id = car_id, make = make, model = model, year = year, location = location, status = status
             )
         nodes_json = [node_to_json(record["c"]) for record in cars]
@@ -34,7 +34,7 @@ def find_car_by_carid(car_id):
         cars = session.run(
             "MATCH (c:Car) "
             "WHERE c.car_id = $car_id "
-            "RETURN c",
+            "RETURN c ",
             car_id = car_id
             )
         nodes_json = [node_to_json(record["c"]) for record in cars]
@@ -44,8 +44,8 @@ def find_car_by_carid(car_id):
 def find_all_cars():
     with _get_connection().session() as session:
         cars = session.run(
-            "MATCH (c:Car)"
-            "RETURN c;"
+            "MATCH (c:Car) "
+            "RETURN c; "
             )
         nodes_json = [node_to_json(record["c"]) for record in cars]
         print (nodes_json)
@@ -57,7 +57,7 @@ def update_car (car_id, make, model, year, location, status):
         cars = session.run(
             "MATCH (c:Car {car_id: $car_id}) "
             "SET c.make = $make, c.model = $model, c.year = $year, c.location = $location, c.status = $status "
-            "RETURN c;",
+            "RETURN c; ",
             car_id = car_id, make = make, model = model, year = year, location = location, status = status
             )
         print (cars)
@@ -70,8 +70,8 @@ def update_car (car_id, make, model, year, location, status):
 def delete_car (car_id):
     with _get_connection().session() as session:
         session.run(
-            "MATCH (c:Car {car_id: $car_id})"
-            "DELETE c;",
+            "MATCH (c:Car {car_id: $car_id}) "
+            "DELETE c; ",
             car_id = car_id
             )
 

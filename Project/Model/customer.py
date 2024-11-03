@@ -21,8 +21,8 @@ def node_to_json(node):
 def save_customer (customer_id, name, age, address):
     with _get_connection().session() as session:
         customers = session.run(
-            "MERGE (u:Customer {customer_id: $customer_id, name: $name, age: $age, address: $address})"
-            "RETURN u",
+            "MERGE (u:Customer {customer_id: $customer_id, name: $name, age: $age, address: $address}) "
+            "RETURN u ",
             customer_id=customer_id, name = name, age = age, address = address
             )
         nodes_json = [node_to_json(record["u"]) for record in customers]
@@ -34,7 +34,7 @@ def find_customer_by_name(name):
         customers = session.run(
             "MATCH (u:Customer)"
             "WHERE u.name = $name "
-            "RETURN u;",
+            "RETURN u; ",
             name = name
             )
         nodes_json = [node_to_json(record["u"]) for record in customers]
@@ -56,7 +56,7 @@ def update_customer (customer_id, name, age, address):
         customers = session.run(
             "MATCH (u:Customer {customer_id: $customer_id})"
             "SET u.name = $name, u.age = $age, u.address = $address "
-            "RETURN u;",
+            "RETURN u; ",
             customer_id = customer_id, name = name, age = age, address = address
             )
         nodes_json = [node_to_json(record["u"]) for record in customers]
@@ -67,7 +67,7 @@ def delete_customer (name):
     with _get_connection().session() as session:
         session.run(
             "MATCH (u:Customer {name: $name})"
-            "DELETE u;",
+            "DELETE u; ",
             name = name
             )
 
@@ -76,7 +76,7 @@ def customer_booking(name):
         is_booked = session.run(
             "MATCH (u:Customer) - [:BOOKED]-> (car:Car) "
             "WHERE u.name = $name "
-            "RETURN car",
+            "RETURN car ",
             name = name
             )
         booking = is_booked.single()

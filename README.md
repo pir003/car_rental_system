@@ -12,7 +12,7 @@ You can also try to get a customer by name.
 To do this you need to change the method from GET to POST, and change to /get_customer_by_name.
 Then you need to go to body, change to raw and make sure it is JSON. 
 You can try to get Bruce Wayne as your customer.
-Write:
-{
-    "name": "Bruce Wayne"
-}
+<img width="644" alt="image" src="https://github.com/user-attachments/assets/a9ede07a-67b2-46f8-99a7-3ce8235894b0">
+
+
+It should look like this.  

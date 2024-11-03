@@ -24,6 +24,11 @@ You need to add customer_id, name, age and address.
 
 Try this to create the customer "Ola Nordmann". 
 
+# Update customer
+To update customer, you need to use the PUT method in postman, and change to /update_customer/<customer_id>
+You need to write the name, age and address.
+
+
 # Delete customer
 If you want to delete the customer, you need to change to DELETE method in postman, and change to /delete_customer. 
 The only parameter you need is the customers name. 

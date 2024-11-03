@@ -74,8 +74,8 @@ def delete_customer (name):
 def customer_booking(name):
     with _get_connection().session() as session:
         is_booked = session.run(
-            "MATCH (u:Customer) - [:BOOKED]-> (car:Car)"
-            "WHERE u.name = $name"
+            "MATCH (u:Customer) - [:BOOKED]-> (car:Car) "
+            "WHERE u.name = $name "
             "RETURN car",
             name = name
             )
@@ -85,9 +85,9 @@ def customer_booking(name):
 def customer_rental (name, car_id):
     with _get_connection().session() as session:
         is_rented = session.run(
-            "MATCH (u:Customer) - [:RENTED]-> (car:Car)"
-            "WHERE u.name = $name AND car.car_id = $car_id"
-            "RETURN car",
+            "MATCH (u:Customer) - [:RENTED]-> (car:Car) "
+            "WHERE u.name = $name AND car.car_id = $car_id "
+            "RETURN car ",
             name = name, car_id = car_id
             )
         rented = is_rented.single()

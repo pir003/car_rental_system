@@ -39,7 +39,7 @@ def order_car( name, car_id):
         return {"success": False, "error": "Car is not available."}
         
     # Endre statusen til bilen til booked
-    update_car(car_id, status="booked")
+    update_car(car ["car_id"], car["make"], car["model"], car["year"], car["location"], status="booked")
         
     # Opprette booking-relasjonen mellom kunden og bilen
     # Se om man må endre fra c til c_customer og c til c_car for å forhindre forvirring

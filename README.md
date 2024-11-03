@@ -15,4 +15,4 @@ You can try to get Bruce Wayne as your customer.
 <img width="644" alt="image" src="https://github.com/user-attachments/assets/a9ede07a-67b2-46f8-99a7-3ce8235894b0">
 
 
-This is how it should look like. 
+It should look like this.  

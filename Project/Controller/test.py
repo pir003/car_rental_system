@@ -11,7 +11,7 @@ import json
 #def index():
 #    return render_template("index.html")
 
-# 
+# Endpoint to retrieve a list of all cars in the database. 
 @app.route('/get_cars', methods=['GET'])
 def query_cars():
     cars = find_all_cars()

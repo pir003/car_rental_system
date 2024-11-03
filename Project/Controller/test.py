@@ -61,7 +61,7 @@ def save_customer_info():
 @app.route('/update_customer/<customer_id>', methods=['PUT']) 
 def update_customer_info(customer_id):
     record = request.get_json()
-    update_customer(customer_id, record["name"], record['age'], record['address'])
+    update_customer(customer_id, record["name"], record["age"], record["address"])
     return jsonify({"message": "Customer updated successfully"})
     
 @app.route('/delete_customer', methods=['DELETE'])

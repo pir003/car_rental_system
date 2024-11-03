@@ -24,7 +24,7 @@ def node_to_json(node):
 
         
     # Metode for bestille bil
-def order_car(self, name, car_id):
+def order_car( name, car_id):
     # Sjekke om kunden har en booking i systemet fra før av
     if customer_booking(name):
         return {"success": False, "error": "Customer have already booked a car"}

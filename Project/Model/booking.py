@@ -101,7 +101,7 @@ def rent_car(name, car_id):
         return {"success": False, "error": "Car is not booked."}
         
     # Endre statusen til bilen til booked
-    update_car(car ["car_id"], car["make"], car["model"], car["year"], car["location"], status="available")
+    update_car(car ["car_id"], car["make"], car["model"], car["year"], car["location"], status="rented")
 
     query = (
         "MATCH (u:Customer)-[r:BOOKED]->(c:Car) "
@@ -115,34 +115,34 @@ def rent_car(name, car_id):
         return {"success": True, "message": "You have now rented this car."}
 
         
-    #def return_car(self, name, car_id, status):
+def return_car(name, car_id, status):
         
-        #Sjekke om kunden har leid bilen
-        #with _get_connection.session() as session:
-            #rental_data = session.run(
-                #"MATCH (u:Customer)-[r:RENTED]->(c:Car)"
-                #"WHERE u.name = $name AND c.car_id = $car_id"
-                #"RETURN c", 
-                #name=name, car_id=car_id
-                #)
+    #Sjekke om kunden har leid bilen
+    with _get_connection.session() as session:
+        rental_data = session.run(
+            "MATCH (u:Customer)-[rent:RENTED]->(c:Car) "
+            "WHERE u.name = $name AND c.car_id = $car_id "
+            "RETURN c ", 
+            name=name, car_id=car_id
+            )
         
-        #if not rental_data:
-            #return {"success": False, "error": "Customer has not rented this car"}
+    if not rental_data:
+        return {"success": False, "error": "Customer has not rented this car"}
         
-        #Endre statusen på bilen
-        #new_status = "available" if status == "ok" else "damaged"
+    #Endre statusen på bilen
+    new_status = "available" if status == "ok" else "damaged"
         
-        #Oppdatere bilens status og slette "RENTED"-relasjonen
-        #query = (
-            #"MATCH (u:Customer)-[r:RENTED]->(c:Car)"
-            #"WHERE u.name = $name AND c.car_id = $car_id"
-            #"DELETE r"
-            #"SET c.status = $new_status"
-        #)
-        #with _get_connection().session() as session:
-            #session.run(query, name=name, car_id=car_id, new_status=new_status)
+    #Oppdatere bilens status og slette "RENTED"-relasjonen
+    query = (
+        "MATCH (u:Customer)-[rent:RENTED]->(c:Car) "
+        "WHERE u.name = $name AND c.car_id = $car_id "
+        "DELETE rent "
+        "SET c.status = $new_status "
+    )
+    with _get_connection().session() as session:
+        session.run(query, name=name, car_id=car_id, new_status=new_status)
         
-        #return {"success": True, "message": f"Bilen er returnert og statusen er '{new_status}'"}
+    return {"success": True, "message": f"Bilen er returnert og statusen er '{new_status}'"}
 
         
      

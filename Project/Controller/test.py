@@ -3,7 +3,7 @@ from flask import render_template, request, redirect, url_for, flash, jsonify
 from Project.Model.car import Car, find_car_by_carid, find_all_cars, save_car, update_car, delete_car
 from Project.Model.customer import Customer, find_customer_by_name, find_all_customers, save_customer, update_customer, delete_customer, customer_booking, customer_rental
 from Project.Model.employee import Employee, find_employee_by_id, find_all_employees, save_employee, update_employee, delete_employee
-from Project.Model.booking import order_car, cancel_car_order, rent_car
+from Project.Model.booking import order_car, cancel_car_order, rent_car, return_car
 import json
 # Eg har skifta litt varriabelnamn, så lurt å sjekke i "car", "customer" og "employee" om det er ei endring.
 
@@ -129,16 +129,15 @@ def rent_a_car():
     else:
         return jsonify({"error": result['error']}), 400  
 
-#@app.route('/return_car', methods=['POST'])
-#def return_a_car():
-    #record = request.get_json()
-    #booking = Booking()
-    #result = booking.return_car(record['name'], record['car_id'], record['status'])
+@app.route('/return_car', methods=['POST'])
+def return_a_car():
+    record = request.get_json()
+    result = return_car(record['name'], record['car_id'], record['status'])
     
-    #if result.get('success'):
-        #return jsonify({"message": result['message']})
-    #else: 
-        #return jsonify({"error": result['error']}), 400
+    if result.get('success'):
+        return jsonify({"message": result['message']})
+    else: 
+        return jsonify({"error": result['error']}), 400
 
 #@app.route('/order_car', methods = ["GET", "POST"])
 #def order_car ():

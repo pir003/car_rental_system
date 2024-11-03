@@ -44,19 +44,14 @@ def order_car( name, car_id):
     # Opprette booking-relasjonen mellom kunden og bilen
     # Se om man må endre fra c til c_customer og c til c_car for å forhindre forvirring
     with _get_connection().session() as session:
-        result = session.run(
+        session.run(
             "MATCH (u:Customer), (c:Car) " 
             "WHERE u.name = $name AND c.car_id = $car_id " 
-            "CREATE (u)-[:BOOKED]->(c) "
-            "RETURN u, c",
+            "CREATE (u)-[:BOOKED]->(c) ",
             name=name, car_id=car_id
         )
         
-        if result.peek():
-            print("Customer and Car nodes found and relationship created")
-        else:
-            print("No matching customer or car node found.")
-        #return {"success": True, "message": "Du har booket bilen!"}
+        return {"success": True, "message": "Du har booket bilen!"}
 
 
         

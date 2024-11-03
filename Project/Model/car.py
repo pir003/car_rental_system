@@ -76,7 +76,7 @@ def delete_car (car_id):
             )
 
 class Car:
-    def __init__(self, car_id, make, model, year, location, status = "available"):
+    def __init__(self, car_id, make, model, year, location, status):
         self.car_id = car_id
         self.make = make
         self.model = model

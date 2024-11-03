@@ -70,7 +70,7 @@ def delete_customer_info():
     delete_customer(record['name'])
     return jsonify({"message": "Customer deleted successfully"})
     
-@app.route('/get_employee', methods=['GET'])
+@app.route('/get_employees', methods=['GET'])
 def find_employees():
     employees = find_all_employees()
     return jsonify(employees)

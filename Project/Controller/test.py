@@ -29,10 +29,11 @@ def save_car_info():
     save_car(record['car_id'], record['make'], record['model'], record['year'], record['location'], record['status'])
     return jsonify({"message": "Car saved successfully."})
 
+
 @app.route('/update_car/<car_id>', methods=['PUT']) 
 def update_car_info(car_id):
     record = request.get_json()
-    update_car(car_id, record['make'], record['model'], record['year'], record['location'], record['status'])
+    update_car(int(car_id), record['make'], record['model'], record['year'], record['location'], record['status'])
     return jsonify({"message": "Car updated successfully."}) # Same som Sav_cars og Delete
 
 @app.route('/delete_car', methods=['DELETE'])

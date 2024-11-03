@@ -64,6 +64,7 @@ def update_car (car_id, make, model, year, location, status):
         nodes_json = [node_to_json(record["c"]) for record in cars]
         print (nodes_json)
         return nodes_json
+    
 
 
 #Deleting a car

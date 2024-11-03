@@ -51,6 +51,24 @@ It requires the employee_id when you are doing it.
 You need to do this to access a specific employee with their employee id. 
 
 ### Create an employee
+To create an employee, you will use the POST method, and change to /save_employee. 
+You need to add employee id, name, address, and branch. 
+<img width="640" alt="image" src="https://github.com/user-attachments/assets/1fa56722-7878-4dff-b585-2d35b9fb9e1e">
+
+Make this employee. 
+
+### Update employee
+To update the employee, you will use the PUT method, and change to /update_employee/<employee_id>
+You need to write the name, address, and branch, even if you only want to change one value. 
+![image](https://github.com/user-attachments/assets/622a12c2-5d50-4cde-90c4-9cb6037fc68e)
+
+Try to this to update the employee. To see if the changes you have made has been updated in the database, you can use on of the methods of seeing existing employees in the database. 
+
+### Delete employee
+To delete an employee, you will use the DELETE method, and change to /delete_employee. 
+You only need the employee id to delete the employee. 
+<img width="635" alt="image" src="https://github.com/user-attachments/assets/976813ec-a53c-4939-bbf4-3e45e6d6a269">
+
 
 
 

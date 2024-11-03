@@ -47,10 +47,16 @@ def order_car( name, car_id):
         session.run(
             "MATCH (u:Customer), (c:Car) " 
             "WHERE u.name = $name AND c.car_id = $car_id " 
-            "CREATE (u)-[:BOOKED]->(c) ",
+            "CREATE (u)-[:BOOKED]->(c) "
+            "RETURN u, c",
             name=name, car_id=car_id
         )
-        return {"success": True, "message": "Du har booket bilen!"}
+        
+        if result.peek():
+            print("Customer and Car nodes found and relationship created")
+        else:
+            print("No matching customer or car node found.")
+        #return {"success": True, "message": "Du har booket bilen!"}
 
 
         

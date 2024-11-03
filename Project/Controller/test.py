@@ -109,38 +109,38 @@ def order_a_car():
     else:
         return jsonify({"error": result['error']}), 400
 
-@app.route('/cancel_car_order', methods=['POST'])
-def cancel_car():
-    record = request.get_json()
-    booking = Booking()
-    result = booking.cancel_car_order(record['name'], record['car_id'])
+#@app.route('/cancel_car_order', methods=['POST'])
+#def cancel_car():
+    #record = request.get_json()
+    #booking = Booking()
+    #result = booking.cancel_car_order(record['name'], record['car_id'])
     
-    if result.get('success'):
-        return jsonify({"message": result['message']})
-    else:
-        return jsonify({"error": result['error']}), 400
+    #if result.get('success'):
+        #return jsonify({"message": result['message']})
+    #else:
+        #return jsonify({"error": result['error']}), 400
 
-@app.route('/rent_car', methods=['POST'])
-def rent_a_car():
-    record = request.get_json()
-    booking = Booking()
-    result = booking.rent_car(record['name'], record['car_id'])
+#@app.route('/rent_car', methods=['POST'])
+#def rent_a_car():
+    #record = request.get_json()
+    #booking = Booking()
+    #result = booking.rent_car(record['name'], record['car_id'])
     
-    if result.get('success'):
-        return jsonify({"message": result['message']})
-    else:
-        return jsonify({"error": result['error']}), 400  
+    #if result.get('success'):
+        #return jsonify({"message": result['message']})
+    #else:
+        #return jsonify({"error": result['error']}), 400  
 
-@app.route('/return_car', methods=['POST'])
-def return_a_car():
-    record = request.get_json()
-    booking = Booking()
-    result = booking.return_car(record['name'], record['car_id'], record['status'])
+#@app.route('/return_car', methods=['POST'])
+#def return_a_car():
+    #record = request.get_json()
+    #booking = Booking()
+    #result = booking.return_car(record['name'], record['car_id'], record['status'])
     
-    if result.get('success'):
-        return jsonify({"message": result['message']})
-    else: 
-        return jsonify({"error": result['error']}), 400
+    #if result.get('success'):
+        #return jsonify({"message": result['message']})
+    #else: 
+        #return jsonify({"error": result['error']}), 400
 
 #@app.route('/order_car', methods = ["GET", "POST"])
 #def order_car ():

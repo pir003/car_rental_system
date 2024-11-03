@@ -26,8 +26,11 @@ Try this to create the customer "Ola Nordmann".
 
 # Update customer
 To update customer, you need to use the PUT method in postman, and change to /update_customer/<customer_id>
-You need to write the name, age and address.
+You need to write the name, age and address, even if you only want to update one of the values. 
+![image](https://github.com/user-attachments/assets/90a09207-034f-4e69-943f-73b327c73f8c)
 
+Try this to update the customer "Ola Nordman", that you just have created. 
+You can also use /get_customers to see if the changes you made have been updated in the database. 
 
 # Delete customer
 If you want to delete the customer, you need to change to DELETE method in postman, and change to /delete_customer. 

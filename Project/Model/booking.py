@@ -19,40 +19,40 @@ def node_to_json(node):
         node_properties = dict(node.items())
         return node_properties
 
-class Booking:
+
     
-    def __init__(self):
-        self.driver = _get_connection()
+
         
     # Metode for bestille bil
-    def order_car(self, name, car_id):
-        # Sjekke om kunden har en booking i systemet fra før av
-        if customer_booking(name):
-            return {"success": False, "error": "Customer have already booked a car"}
+def order_car(self, name, car_id):
+    # Sjekke om kunden har en booking i systemet fra før av
+    if customer_booking(name):
+        return {"success": False, "error": "Customer have already booked a car"}
         
-        # Sjekke om bilen er tilgjengelig eller ikke
-        car_list = find_car_by_carid(car_id)
-        if not car_list:
-            return {"success": False, "error": "Car not found."}
+    # Sjekke om bilen er tilgjengelig eller ikke
+    car_list = find_car_by_carid(car_id)
+    if not car_list:
+        return {"success": False, "error": "Car not found."}
         
-        car = car_list[0]
-        if car.get("status") != "available":
-            return {"success": False, "error": "Car is not available."}
+    car = car_list[0]
+    if car.get("status") != "available":
+        return {"success": False, "error": "Car is not available."}
         
-        # Endre statusen til bilen til booked
-        update_car(car_id, status="booked")
+    # Endre statusen til bilen til booked
+    update_car(car_id, status="booked")
         
-        # Opprette booking-relasjonen mellom kunden og bilen
-        # Se om man må endre fra c til c_customer og c til c_car for å forhindre forvirring
-        query = (
+    # Opprette booking-relasjonen mellom kunden og bilen
+    # Se om man må endre fra c til c_customer og c til c_car for å forhindre forvirring
+    with _get_connection().session() as session:
+        session.run(
             "MATCH (u:Customer), (c:Car) "
             "WHERE u.name = $name AND c.car_id = $car_id "
-            "CREATE (u)-[:BOOKED]->(c) "
-            )
-        
-        with self.driver.session() as session:
-            session.run(query, name=name, car_id=car_id)
+            "CREATE (u)-[:BOOKED]->(c) ",
+            name=name, car_id=car_id
+        )
         return {"success": True, "message": "Du har booket bilen!"}
+
+
         
     # Metode for å kansellere en booking    
     def cancel_car_order(self, name, car_id):

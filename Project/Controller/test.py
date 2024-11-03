@@ -63,7 +63,7 @@ def update_customer_info(customer_id):
     record = request.get_json()
     updated_customer = update_customer(customer_id, record["name"], record["age"], record["address"])
     if updated_customer:
-        return jsonify({"message": "Customer updated successfully", "updated_customer": update_customer})
+        return jsonify({"message": "Customer updated successfully", "updated_customer": updated_customer})
     else:
         return jsonify({"error": "Customer not founf or update failed"}), 404
     

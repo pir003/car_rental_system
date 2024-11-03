@@ -45,9 +45,10 @@ def order_car( name, car_id):
     # Se om man må endre fra c til c_customer og c til c_car for å forhindre forvirring
     with _get_connection().session() as session:
         session.run(
-            "MERGE (u:Customer {name: $name}) " 
-            "MERGE (c:Car {car_id: $car_id}) " 
-            "MERGE (u)-[:BOOKED]->(c) ",
+            "MATCH (u:Customer {name: $name}) " 
+            "MATCH (c:Car {car_id: $car_id}) "
+            "WITH u, c " 
+            "CREATE (u)-[:BOOKED]->(c) ",
             name=name, car_id=car_id
         )
         

@@ -1,17 +1,16 @@
 from neo4j import GraphDatabase, Driver
-from Project.Model.neo import _get_connection
 from Project.Model.car import find_car_by_carid, update_car
 from Project.Model.customer import find_customer_by_name, customer_booking, customer_rental
 import json
 
 # Oppsett av databaseforbindelsen
-#URI = "neo4j+ssc://09b7066b.databases.neo4j.io"
-#AUTH = ("neo4j", "1RWjhvw4XiA1EaB-OSmdOzdKgzP6e3rKvG77avLwHgU")
+URI = "neo4j+ssc://09b7066b.databases.neo4j.io"
+AUTH = ("neo4j", "1RWjhvw4XiA1EaB-OSmdOzdKgzP6e3rKvG77avLwHgU")
 
-#def _get_connection() -> Driver:
-    #driver = GraphDatabase.driver(URI, auth=AUTH)
-    #driver.verify_connectivity()
-    #return driver
+def _get_connection() -> Driver:
+    driver = GraphDatabase.driver(URI, auth=AUTH)
+    driver.verify_connectivity()
+    return driver
 
 def node_to_json(node):
     if node is None:
@@ -23,7 +22,7 @@ def node_to_json(node):
 class Booking:
     
     def __init__(self):
-        self.driver = _get_connection
+        self.driver = _get_connection()
         
     # Metode for bestille bil
     def order_car(self, name, car_id):
@@ -48,13 +47,10 @@ class Booking:
         query = (
             "MATCH (u:Customer), (c:Car) "
             "WHERE u.name = $name AND c.car_id = $car_id "
-            "CREATE (u)-[b:BOOKED]->(c) "
-            "RETURN b"
+            "CREATE (u)-[:BOOKED]->(c) "
             )
         
-        print(f"Running query: {query} with parameters: name={name}, car_id={car_id}")
-        
-        with _get_connection().session() as session:
+        with self.driver.session() as session:
             session.run(query, name=name, car_id=car_id)
         return {"success": True, "message": "Du har booket bilen!"}
         

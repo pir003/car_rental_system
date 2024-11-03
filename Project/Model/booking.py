@@ -56,29 +56,29 @@ def order_car( name, car_id):
 
 
         
-    # Metode for å kansellere en booking    
-    #def cancel_car_order(self, name, car_id):
-        # Sjekke om kunden har en booking i systemet
-        #if not customer_booking(name):
-            #return {"success": False, "error": "Du har ingen booking å kansellere"}
+# Metode for å kansellere en booking    
+def cancel_car_order(name, car_id):
+    #Sjekke om kunden har en booking i systemet
+    if not customer_booking(name):
+        return {"success": False, "error": "Du har ingen booking å kansellere"}
         
-        # Sjekke om statusen på bilen er "booked"
-        #car = find_car_by_carid(car_id)
-        #if car.get_status() != "booked":
-            #return {"success": False, "error": "Bilen er ikke booket"}
+    #Sjekke om statusen på bilen er "booked"
+    car = find_car_by_carid(car_id)
+    if car.get_status() != "booked":
+        return {"success": False, "error": "Bilen er ikke booket"}
         
-        # Slette "booked"-relasjonen mellom kunde og bil, og oppdatere status på bil
-        #query = (
-            #"MATCH (u:Customer)-[r:BOOKED]->(c:Car)"
-            #"WHERE u.name = $name AND c.car_id = $car_id"
-            #"DELETE r"
-            #)
-        #with _get_connection().session() as session:
-            #session.run(query, name=name, car_id=car_id)
+    # Slette "booked"-relasjonen mellom kunde og bil, og oppdatere status på bil
+    query = (
+        "MATCH (u:Customer)-[r:BOOKED]->(c:Car)"
+        "WHERE u.name = $name AND c.car_id = $car_id"
+        "DELETE r"
+        )
+    with _get_connection().session() as session:
+        session.run(query, name=name, car_id=car_id)
 
-        #update_car(car_id, status="available")
+        update_car(car_id, status="available")
         
-        #return {"success": True, "message": "Bookingen er kansellert"}
+        return {"success": True, "message": "Bookingen er kansellert"}
         
     #def rent_car(self, name, car_id):
         # Sjekke om kunden har booket bilen

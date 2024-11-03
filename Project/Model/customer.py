@@ -57,7 +57,7 @@ def update_customer (customer_id, name, age, address):
             "MATCH (u:Customer {customer_id: $customer_id}) "
             "SET u.name = $name, u.age = $age, u.address = $address "
             "RETURN u; ",
-            customer_id=customer_id, name = name, age = age, address = address
+            customer_id=customer_id, name=name, age=age, address=address
             )
         nodes_json = [node_to_json(record["u"]) for record in customers]
         return nodes_json

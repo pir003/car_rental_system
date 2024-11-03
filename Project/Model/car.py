@@ -1,7 +1,7 @@
 from neo4j import GraphDatabase, Driver
 import json
 
-# Oppsett av databaseforbindelsen
+# Creating a database connection: 
 URI = "neo4j+ssc://09b7066b.databases.neo4j.io"
 AUTH = ("neo4j", "1RWjhvw4XiA1EaB-OSmdOzdKgzP6e3rKvG77avLwHgU")
 
@@ -10,6 +10,8 @@ def _get_connection() -> Driver:
     driver.verify_connectivity()
     return driver
 
+
+# Creating json nodes:
 def node_to_json(node):
     if node is None:
         return {}
@@ -17,7 +19,8 @@ def node_to_json(node):
         node_properties = dict(node.items())
         return node_properties
 
-# Creating a car
+
+# Creating a car:
 def save_car (car_id, make, model, year, location, status="available"):
     with _get_connection().session() as session:
         cars = session.run(
@@ -28,7 +31,8 @@ def save_car (car_id, make, model, year, location, status="available"):
         nodes_json = [node_to_json(record["c"]) for record in cars]
         return nodes_json
 
-# Find a specific car
+
+# Find a specific car:
 def find_car_by_carid(car_id):
     with _get_connection().session() as session:
         cars = session.run(
@@ -40,7 +44,8 @@ def find_car_by_carid(car_id):
         nodes_json = [node_to_json(record["c"]) for record in cars]
         return nodes_json
 
-# Find all cars
+
+# Find all cars:
 def find_all_cars():
     with _get_connection().session() as session:
         cars = session.run(
@@ -51,7 +56,8 @@ def find_all_cars():
         print (nodes_json)
         return nodes_json
 
-# Updating car information
+
+# Updating car information:
 def update_car (car_id, make, model, year, location, status):
     with _get_connection().session() as session:
         cars = session.run(
@@ -66,7 +72,6 @@ def update_car (car_id, make, model, year, location, status):
         return nodes_json
     
 
-
 #Deleting a car
 def delete_car (car_id):
     with _get_connection().session() as session:
@@ -76,6 +81,7 @@ def delete_car (car_id):
             car_id = car_id
             )
 
+# Car class:
 class Car:
     def __init__(self, car_id, make, model, year, location, status= "available"):
         self.car_id = car_id
@@ -85,7 +91,6 @@ class Car:
         self.location = location
         self.status = status
 
-    
     def get_status (self):
         return self.status
     

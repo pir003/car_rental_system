@@ -5,13 +5,13 @@ from Project.Model.customer import Customer, find_customer_by_name, find_all_cus
 from Project.Model.employee import Employee, find_employee_by_id, find_all_employees, save_employee, update_employee, delete_employee
 from Project.Model.booking import order_car, cancel_car_order, rent_car, return_car
 import json
-# Eg har skifta litt varriabelnamn, så lurt å sjekke i "car", "customer" og "employee" om det er ei endring.
 
-
+# This code is not in use, but would be used if we had used HTML.
 #@app.route('/', methods=["GET", "POST"])
 #def index():
 #    return render_template("index.html")
 
+# 
 @app.route('/get_cars', methods=['GET'])
 def query_cars():
     cars = find_all_cars()

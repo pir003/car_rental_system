@@ -1,7 +1,7 @@
 from neo4j import GraphDatabase, Driver
 import json
 
-# Oppsett av databaseforbindelsen
+# Creating a database connection:
 URI = "neo4j+ssc://09b7066b.databases.neo4j.io"
 AUTH = ("neo4j", "1RWjhvw4XiA1EaB-OSmdOzdKgzP6e3rKvG77avLwHgU")
 
@@ -10,6 +10,8 @@ def _get_connection() -> Driver:
     driver.verify_connectivity()
     return driver
 
+
+# Creating json nodes:
 def node_to_json(node):
     if node is None:
         return {}
@@ -17,7 +19,8 @@ def node_to_json(node):
         node_properties = dict(node.items())
         return node_properties
 
-# Creating a customer
+
+# Creating a customer:
 def save_customer (customer_id, name, age, address):
     with _get_connection().session() as session:
         customers = session.run(
@@ -28,7 +31,8 @@ def save_customer (customer_id, name, age, address):
         nodes_json = [node_to_json(record["u"]) for record in customers]
         return nodes_json
 
-# Find a specific customer
+
+# Find a specific customer:
 def find_customer_by_name(name):
     with _get_connection().session() as session:
         customers = session.run(
@@ -40,7 +44,8 @@ def find_customer_by_name(name):
         nodes_json = [node_to_json(record["u"]) for record in customers]
         return nodes_json
 
-# Find all customers
+
+# Find all customers:
 def find_all_customers():
     with _get_connection().session() as session:
         customers = session.run(
@@ -50,7 +55,8 @@ def find_all_customers():
         nodes_json = [node_to_json(record["u"]) for record in customers]
         return nodes_json
 
-# Updating customer information
+
+# Updating customer information:
 def update_customer (customer_id, name, age, address):
     with _get_connection().session() as session:
         customers = session.run(
@@ -62,7 +68,8 @@ def update_customer (customer_id, name, age, address):
         nodes_json = [node_to_json(record["u"]) for record in customers]
         return nodes_json
 
-#Deleting a customer
+
+# Deleting a customer:
 def delete_customer (name):
     with _get_connection().session() as session:
         session.run(
@@ -71,6 +78,7 @@ def delete_customer (name):
             name = name
             )
 
+# Booking a car:
 def customer_booking(name):
     with _get_connection().session() as session:
         is_booked = session.run(
@@ -82,6 +90,8 @@ def customer_booking(name):
         booking = is_booked.single()
         return booking is not None
 
+
+# Renting a car:
 def customer_rental (name, car_id):
     with _get_connection().session() as session:
         is_rented = session.run(
@@ -93,6 +103,8 @@ def customer_rental (name, car_id):
         rented = is_rented.single()
         return rented is not None
 
+
+# Customer class:
 class Customer:
     def __init__(self, customer_id ,name, age, address):
         self.customer_id = customer_id

@@ -1,7 +1,7 @@
 from neo4j import GraphDatabase, Driver
 import json
 
-# Oppsett av databaseforbindelsen
+# Creating a database connection:
 URI = "neo4j+ssc://09b7066b.databases.neo4j.io"
 AUTH = ("neo4j", "1RWjhvw4XiA1EaB-OSmdOzdKgzP6e3rKvG77avLwHgU")
 
@@ -10,12 +10,15 @@ def _get_connection() -> Driver:
     driver.verify_connectivity()
     return driver
 
+
+# Creating json nodes:
 def node_to_json(node):
     if node is None:
         return {}
     else:
         node_properties = dict(node.items())
         return node_properties
+
 
 # Creating an employee
 def save_employee (employee_id, name, address, branch):
@@ -27,7 +30,8 @@ def save_employee (employee_id, name, address, branch):
             )
         nodes_json = [node_to_json(record["e"]) for record in employees]
         return nodes_json
-    
+
+
 # Find a specific employee:
 def find_employee_by_id(employee_id):
     with _get_connection().session() as session:
@@ -40,6 +44,7 @@ def find_employee_by_id(employee_id):
         nodes_json = [node_to_json(record["e"]) for record in employees]
         return nodes_json
 
+
 # Find all employees:
 def find_all_employees():
     with _get_connection().session() as session:
@@ -50,7 +55,8 @@ def find_all_employees():
         nodes_json = [node_to_json(record["e"]) for record in employees]
         return nodes_json
 
-# # Updating customer information
+
+# Updating employee information:
 def update_employee (employee_id, name, address, branch):
     with _get_connection().session() as session:
         employees = session.run (
@@ -62,7 +68,8 @@ def update_employee (employee_id, name, address, branch):
         nodes_json = [node_to_json(record["e"]) for record in employees]
         return nodes_json
 
-#Deleting an employee
+
+# Deleting an employee:
 def delete_employee (employee_id):
     with _get_connection().session() as session:
         session.run(
@@ -72,6 +79,7 @@ def delete_employee (employee_id):
             )
 
 
+# Employee Class:
 class Employee:
     def __init__(self, employee_id, name, address, branch):
         self.employee_id = employee_id
